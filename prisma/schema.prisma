@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Country {
+  id             Int    @id @default(autoincrement())
+  slug           String @unique
+  name           String
+  currencyCode   String
+  currencySymbol String
+  /// "week" or "month" — how rent is quoted in this market
+  rentPeriod     String
+  cities         City[]
+}
+
+model City {
+  id           Int          @id @default(autoincrement())
+  slug         String       @unique
+  name         String
+  countryId    Int
+  country      Country      @relation(fields: [countryId], references: [id])
+  universities University[]
+  properties   Property[]
+
+  @@index([countryId])
+}
+
+model University {
+  id     Int    @id @default(autoincrement())
+  slug   String @unique
+  name   String
+  lat    Float
+  lng    Float
+  cityId Int
+  city   City   @relation(fields: [cityId], references: [id])
+
+  @@index([cityId])
+}
+
+model Property {
+  id            Int        @id @default(autoincrement())
+  slug          String     @unique
+  name          String
+  area          String
+  address       String
+  lat           Float
+  lng           Float
+  description   String
+  propertyType  String
+  rating        Float
+  reviewCount   Int
+  /// Image URLs, cover photo first
+  images        String[]
+  /// Amenity keys (see lib/amenities.ts)
+  amenities     String[]
+  /// Badge labels, e.g. "No Visa, No Pay"
+  badges        String[]
+  billsIncluded Boolean
+  featured      Boolean    @default(false)
+  cityId        Int
+  city          City       @relation(fields: [cityId], references: [id])
+  roomTypes     RoomType[]
+  reviews       Review[]
+  enquiries     Enquiry[]
+
+  @@index([cityId])
+}
+
+model RoomType {
+  id           Int      @id @default(autoincrement())
+  name         String
+  /// SHARED | ENSUITE | STUDIO | APARTMENT
+  category     String
+  sizeSqm      Int
+  /// Rent per country.rentPeriod, in whole currency units
+  price        Int
+  tenancyWeeks Int
+  available    Boolean
+  propertyId   Int
+  property     Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+}
+
+model Review {
+  id             Int      @id @default(autoincrement())
+  authorName     String
+  universityName String
+  rating         Int
+  text           String
+  propertyId     Int
+  property       Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+}
+
+model Enquiry {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String
+  phone        String?
+  city         String?
+  moveInMonth  String?
+  roomTypeName String?
+  message      String?
+  propertyId   Int?
+  property     Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
+}
+
+/// Tester feedback on the POC, collected from the feedback button on every page.
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  /// "yes" | "maybe" | "no" — answer to "Would you use this to find a room?"
+  wouldUse  String?
+  message   String
+  email     String?
+  /// Page path the feedback was sent from
+  page      String
+  createdAt DateTime @default(now())
+}

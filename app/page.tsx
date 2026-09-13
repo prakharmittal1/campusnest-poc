@@ -1,69 +1,146 @@
-import Image from "next/image";
+import { ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
+import { RouteIllustration } from "@/components/brand/RouteIllustration";
+import { EnquiryModal } from "@/components/enquiry/EnquiryModal";
+import { Faq } from "@/components/Faq";
+import { PropertyCard } from "@/components/PropertyCard";
+import { SearchBar } from "@/components/SearchBar";
+import { Container, SectionHeading } from "@/components/ui/layout";
+import { Tag } from "@/components/ui/Tag";
+import { HOME_FAQS, HOW_IT_WORKS } from "@/content/home";
+import { periodShort } from "@/lib/format";
+import { getCountriesWithCities, getFeaturedProperties } from "@/lib/queries";
+import { site } from "@/lib/site";
 
-export default function Home() {
+export default async function HomePage() {
+  const [countries, featured] = await Promise.all([getCountriesWithCities(), getFeaturedProperties()]);
+
+  const cities = countries.flatMap((country) =>
+    country.cities.map((city) => ({ ...city, country, href: `/${country.slug}/${city.slug}` })),
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <>
+      <Container className="grid items-center gap-12 pb-20 pt-12 md:grid-cols-[1.1fr_1fr] md:pt-20">
+        <div className="min-w-0">
+          <h1 className="heading-xl">
+            Find your student home <span className="highlight">near campus</span>.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-ink-soft">{site.description}</p>
+
+          <div className="mt-8 max-w-xl">
+            <SearchBar />
+          </div>
+
+          <p className="mt-4 text-sm text-muted">
+            Popular:{" "}
+            {cities.slice(0, 4).map((city, i) => (
+              <span key={city.id}>
+                {i > 0 && ", "}
+                <Link href={city.href} className="font-semibold text-ink underline-offset-4 hover:underline">
+                  {city.name}
+                </Link>
+              </span>
+            ))}
           </p>
+
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
+            {site.promises.map((promise) => (
+              <li key={promise} className="flex items-center gap-2 text-sm font-medium text-ink-soft">
+                <Check className="size-4 text-ink" strokeWidth={2.5} aria-hidden />
+                {promise}
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="hidden md:block">
+          <RouteIllustration />
         </div>
-      </main>
-    </div>
+      </Container>
+
+      <section id="destinations" className="scroll-mt-20 border-t border-line py-20">
+        <Container>
+          <SectionHeading
+            title="Explore by city"
+            description="Rent is shown the way each market quotes it — per week or per month."
+          />
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {cities.map((city) => (
+              <li key={city.id}>
+                <Link
+                  href={city.href}
+                  className="group flex items-center justify-between gap-4 rounded-card border border-line p-5 transition-colors hover:border-ink"
+                >
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="heading-md">{city.name}</span>
+                      <Tag>
+                        {city.country.currencySymbol}/{periodShort(city.country)}
+                      </Tag>
+                    </div>
+                    <p className="mt-1 text-sm text-muted">
+                      {city._count.properties} homes · {city._count.universities} universities
+                    </p>
+                  </div>
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-surface transition-colors group-hover:bg-accent">
+                    <ArrowRight className="size-4 text-ink" aria-hidden />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      <section className="border-t border-line py-20">
+        <Container>
+          <SectionHeading title="Top-rated homes" description="What students are enquiring about this week." />
+          <div className="mt-8 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((property) => (
+              <PropertyCard key={property.slug} property={property} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-t border-line bg-surface py-20">
+        <Container>
+          <SectionHeading title="How it works" />
+          <ol className="mt-10 grid gap-10 md:grid-cols-3">
+            {HOW_IT_WORKS.map((step, i) => (
+              <li key={step.title}>
+                <span className="flex size-9 items-center justify-center rounded-full bg-accent text-sm font-extrabold text-ink">
+                  {i + 1}
+                </span>
+                <h3 className="heading-md mt-4">{step.title}</h3>
+                <p className="mt-2 max-w-xs text-[15px] leading-relaxed text-muted">{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </Container>
+      </section>
+
+      <Container className="grid gap-10 py-20 md:grid-cols-[1fr_1.5fr]">
+        <div>
+          <h2 className="heading-lg">Questions, answered</h2>
+          <p className="mt-2 text-[15px] text-muted">Can&apos;t see yours? Our experts reply within 24 hours.</p>
+        </div>
+        <Faq items={HOME_FAQS} />
+      </Container>
+
+      <Container>
+        <section className="flex flex-col items-start justify-between gap-6 rounded-panel bg-ink px-7 py-10 text-white sm:flex-row sm:items-center sm:px-12 sm:py-14">
+          <div>
+            <h2 className="heading-lg">Not sure where to start?</h2>
+            <p className="mt-2 max-w-md text-[15px] text-white/70">
+              Tell us your university and budget — we&apos;ll send a free shortlist within 24 hours.
+            </p>
+          </div>
+          <EnquiryModal variant="accent" size="lg">
+            Get my free shortlist
+          </EnquiryModal>
+        </section>
+      </Container>
+    </>
   );
 }

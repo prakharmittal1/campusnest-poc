@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Design tokens — the single source of truth for the "wayfinding" visual language:
+ * white paper, navy ink, one sunshine-yellow accent (used sparingly), hairline borders.
+ * Default Tailwind colours are removed so every colour in the codebase comes from here.
+ * Rebranding = editing this block (and lib/site.ts).
+ */
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-canvas: #ffffff; /* page background */
+  --color-surface: #f4f5f7; /* panels, image placeholders, tags */
+  --color-surface-strong: #e9ecf0; /* hover on surface */
+  --color-line: #e6e8ec; /* hairlines and dividers */
+  --color-line-strong: #cdd2da; /* input and button outlines */
+  --color-ink: #0f1b2d; /* headings, primary buttons, dark bands */
+  --color-ink-soft: #3a4556; /* body copy */
+  --color-muted: #6b7585; /* secondary text */
+  --color-accent: #ffc629; /* brand yellow — logo, highlighter, key CTA, map pin */
+  --color-accent-strong: #f2b300; /* hover on accent */
+  --color-accent-soft: #fff4cc; /* subtle accent fills */
+  --color-success: #1f8a5b;
+  --color-danger: #c0392b;
+  --color-danger-soft: #fdecea;
+
+  --radius-control: 0.625rem; /* buttons, inputs */
+  --radius-card: 0.875rem; /* cards, images */
+  --radius-panel: 1.25rem; /* large panels and bands */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Type scale: confident, compact headings; body stays regular weight. */
+@utility heading-xl {
+  font-size: clamp(2.25rem, 1.5rem + 2.8vw, 3.5rem);
+  line-height: 1.06;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+@utility heading-lg {
+  font-size: clamp(1.625rem, 1.3rem + 1.2vw, 2.125rem);
+  line-height: 1.15;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+@utility heading-md {
+  font-size: 1.1875rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+/* Signature highlighter stroke behind key words. */
+@utility highlight {
+  background-image: linear-gradient(
+    transparent 60%,
+    var(--color-accent) 60%,
+    var(--color-accent) 90%,
+    transparent 90%
+  );
+  box-decoration-break: clone;
+  padding-inline: 0.06em;
+}
+
+@layer base {
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  dialog::backdrop {
+    background: rgb(15 27 45 / 0.5);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Keep Leaflet panes beneath the sticky header, and mute the colourful map tiles. */
+.leaflet-container {
+  z-index: 0;
+  font-family: inherit;
+  background: var(--color-surface);
+}
+
+.leaflet-tile-pane {
+  filter: grayscale(1) contrast(0.9) brightness(1.06);
 }
