@@ -52,6 +52,7 @@ brand mark. Use `className` on buttons for layout only (margins, width), not to 
 - Prisma 7 with PostgreSQL (Neon in production) through the `pg` driver adapter
 - Leaflet with OpenStreetMap tiles (greyed out via CSS)
 - Zod for validating the enquiry form
+- Vercel Web Analytics for page views and visitors (`<Analytics />` in `app/layout.tsx`)
 
 ## Getting started (local)
 
@@ -76,6 +77,11 @@ npm run dev            # http://localhost:3000
    data on the first run only, and builds the site.
 
 Every push to `main` redeploys production; other branches get preview URLs.
+
+### Analytics
+
+Page views and visitors appear in Vercel under the project's **Analytics** tab (enable it there once).
+Nothing is sent from local development.
 
 ### Reading feedback and enquiries
 
