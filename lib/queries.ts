@@ -13,6 +13,7 @@ export type PropertyCardData = {
   rating: number;
   reviewCount: number;
   billsIncluded: boolean;
+  isDemo: boolean;
   href: string;
   country: Pick<Country, "slug" | "currencySymbol" | "rentPeriod">;
   cityName: string;
@@ -36,6 +37,7 @@ function toCardData(property: CardSource, distance?: PropertyCardData["distance"
     rating: property.rating,
     reviewCount: property.reviewCount,
     billsIncluded: property.billsIncluded,
+    isDemo: property.isDemo,
     href: `/${property.city.country.slug}/${property.city.slug}/${property.slug}`,
     country: {
       slug: property.city.country.slug,
@@ -97,7 +99,7 @@ export const getCity = cache(async (countrySlug: string, citySlug: string) =>
 export async function getCityListing(countrySlug: string, citySlug: string, filters: ListingFilters) {
   const city = await prisma.city.findFirst({
     where: { slug: citySlug, country: { slug: countrySlug } },
-    include: { country: true, universities: { orderBy: { name: "asc" } } },
+    include: { country: true, universities: { orderBy: { name: "asc" } }, benchmark: true },
   });
   if (!city) return null;
 
@@ -163,7 +165,7 @@ export const getProperty = cache(async (countrySlug: string, citySlug: string, p
   const property = await prisma.property.findFirst({
     where: { slug: propertySlug, city: { slug: citySlug, country: { slug: countrySlug } } },
     include: {
-      city: { include: { country: true, universities: true } },
+      city: { include: { country: true, universities: true, benchmark: true } },
       roomTypes: { orderBy: [{ available: "desc" }, { price: "asc" }] },
       reviews: { orderBy: { id: "asc" } },
     },

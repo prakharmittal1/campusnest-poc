@@ -23,9 +23,10 @@ model City {
   slug         String       @unique
   name         String
   countryId    Int
-  country      Country      @relation(fields: [countryId], references: [id])
+  country      Country        @relation(fields: [countryId], references: [id])
   universities University[]
   properties   Property[]
+  benchmark    RentBenchmark?
 
   @@index([countryId])
 }
@@ -62,6 +63,8 @@ model Property {
   badges        String[]
   billsIncluded Boolean
   featured      Boolean    @default(false)
+  /// Seeded example listing rather than real inventory — shown with an "Example listing" label.
+  isDemo        Boolean    @default(true)
   cityId        Int
   city          City       @relation(fields: [cityId], references: [id])
   roomTypes     RoomType[]
@@ -110,7 +113,12 @@ model Enquiry {
   message      String?
   propertyId   Int?
   property     Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  /// Set when the student was signed in
+  userId       String?
+  user         User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt    DateTime  @default(now())
+
+  @@index([userId])
 }
 
 /// Tester feedback on the POC, collected from the feedback button on every page.
@@ -123,4 +131,125 @@ model Feedback {
   /// Page path the feedback was sent from
   page      String
   createdAt DateTime @default(now())
+}
+
+/// Published market rent for a city (university or government source), shown next to listings
+/// so prices can be sanity-checked against reality. See prisma/benchmarks.ts.
+model RentBenchmark {
+  id         Int     @id @default(autoincrement())
+  cityId     Int     @unique
+  city       City    @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  lowPrice   Int
+  highPrice  Int?
+  /// "week" or "month" — matches how the source quotes rent
+  period     String
+  sourceName String
+  sourceUrl  String
+  note       String
+  asOf       String
+}
+
+// ─── Student accounts (Better Auth: User, Session, Account, Verification) ─────────────────────────
+
+/// A student account. The first block is managed by Better Auth; the rest is lead data we collect.
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  phone              String?
+  nationality        String?
+  destinationCountry String?
+  destinationCity    String?
+  university         String?
+  /// Month the student wants to move in, e.g. "September 2027"
+  studyStart         String?
+  /// Free text in the student's own currency, e.g. "£250/week" or "₱25,000/month"
+  budget             String?
+  /// UI language: "en" | "fil"
+  locale             String   @default("en")
+  /// Agreed to have their details shared with accommodation providers (Philippine Data Privacy Act consent)
+  consentToShare     Boolean  @default(false)
+  consentAt          DateTime?
+  /// Set once the welcome form has been saved or skipped
+  onboardedAt        DateTime?
+  /// First-touch attribution from the landing URL
+  utmSource          String?
+  utmMedium          String?
+  utmCampaign        String?
+  referrer           String?
+
+  sessions  Session[]
+  accounts  Account[]
+  events    JourneyEvent[]
+  enquiries Enquiry[]
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+/// Magic-link tokens
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+/// One step in a visitor's journey. Recorded anonymously (cookie id) and attached to the account on sign-in.
+model JourneyEvent {
+  id          Int      @id @default(autoincrement())
+  /// Value of the `cn_aid` cookie, so activity before sign-up can be attached to the account later
+  anonymousId String
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// search | view_city | view_property | select_room | enquiry_sent | signup | login | locale_change
+  type        String
+  /// Page path the event happened on
+  path        String
+  /// Event details, e.g. { city, property, filters, query, room }
+  data        Json?
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([anonymousId])
+  @@index([createdAt])
 }

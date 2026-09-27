@@ -21,8 +21,8 @@ function toPrice(value: string | string[] | undefined): number | undefined {
   return Number.isFinite(n) && n >= 0 ? n : undefined;
 }
 
-const ROOM_VALUES = new Set<string>(ROOM_CATEGORIES.map((c) => c.value));
-const SORT_VALUES = new Set<string>(SORT_OPTIONS.map((o) => o.value));
+const ROOM_VALUES = new Set<string>(ROOM_CATEGORIES);
+const SORT_VALUES = new Set<string>(SORT_OPTIONS);
 
 /** Turns listing URL params (?room=STUDIO&amenity=gym&university=ucl…) into validated filters. */
 export function parseListingFilters(params: RawSearchParams): ListingFilters {

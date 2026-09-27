@@ -1,13 +1,14 @@
 "use client";
 
 import { LoaderCircle, SlidersHorizontal, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
-import { AMENITIES, FILTERABLE_AMENITIES } from "@/lib/amenities";
+import { FILTERABLE_AMENITIES } from "@/lib/amenities";
 import { ROOM_CATEGORIES } from "@/lib/constants";
 import { cx } from "@/lib/cx";
 import type { ListingFilters as Filters } from "@/lib/filters";
-import { periodLong } from "@/lib/format";
+import { rentPeriod } from "@/lib/format";
 import { toggleValue, useQueryUpdater } from "./useQueryUpdater";
 
 type ListingFiltersProps = {
@@ -51,6 +52,9 @@ export function ListingFilters({
   resultCount,
   activeFilterCount,
 }: ListingFiltersProps) {
+  const t = useTranslations("filters");
+  const tRoom = useTranslations("roomCategories");
+  const tAmenity = useTranslations("amenities");
   const { update, clear, isPending } = useQueryUpdater();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -69,7 +73,8 @@ export function ListingFilters({
     <>
       <Button variant="outline" onClick={() => setMobileOpen(true)} className="lg:hidden">
         <SlidersHorizontal className="size-4" aria-hidden />
-        Filters{activeFilterCount > 0 && ` · ${activeFilterCount}`}
+        {t("button")}
+        {activeFilterCount > 0 && ` · ${activeFilterCount}`}
       </Button>
 
       <div
@@ -80,20 +85,20 @@ export function ListingFilters({
       >
         <div className="flex h-16 items-center justify-between border-b border-line px-5 lg:mb-5 lg:h-auto lg:border-0 lg:px-0">
           <h2 className="heading-md flex items-center gap-2">
-            Filters
-            {isPending && <LoaderCircle className="size-3.5 animate-spin text-muted" aria-label="Updating" />}
+            {t("title")}
+            {isPending && <LoaderCircle className="size-3.5 animate-spin text-muted" aria-label={t("updating")} />}
           </h2>
           <div className="flex items-center gap-3">
             {activeFilterCount > 0 && (
               <button type="button" onClick={clear} className="text-sm text-muted underline-offset-4 hover:text-ink hover:underline">
-                Clear all
+                {t("clearAll")}
               </button>
             )}
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
               className="-mr-2 rounded-control p-2 text-muted hover:bg-surface lg:hidden"
-              aria-label="Close filters"
+              aria-label={t("close")}
             >
               <X className="size-5" />
             </button>
@@ -101,7 +106,7 @@ export function ListingFilters({
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 pt-5 lg:max-h-[calc(100dvh-9rem)] lg:px-0 lg:pt-0">
-          <Section title="Near university">
+          <Section title={t("nearUniversity")}>
             <select
               value={filters.university ?? ""}
               onChange={(e) =>
@@ -114,9 +119,9 @@ export function ListingFilters({
                 })
               }
               className={fieldClass}
-              aria-label="Near university"
+              aria-label={t("nearUniversity")}
             >
-              <option value="">Any university</option>
+              <option value="">{t("anyUniversity")}</option>
               {universities.map((u) => (
                 <option key={u.slug} value={u.slug}>
                   {u.name}
@@ -125,7 +130,7 @@ export function ListingFilters({
             </select>
           </Section>
 
-          <Section title={`Price per ${periodLong(market)} (${market.currencySymbol})`}>
+          <Section title={t("price", { period: rentPeriod(market), symbol: market.currencySymbol })}>
             <form
               // Remount when the URL changes (e.g. "Clear all") so inputs show the applied values.
               key={`${filters.minPrice}-${filters.maxPrice}`}
@@ -142,7 +147,7 @@ export function ListingFilters({
                 inputMode="numeric"
                 defaultValue={filters.minPrice}
                 placeholder={`${priceRange.min}`}
-                aria-label="Minimum price"
+                aria-label={t("minPrice")}
                 className={fieldClass}
               />
               <input
@@ -152,29 +157,29 @@ export function ListingFilters({
                 inputMode="numeric"
                 defaultValue={filters.maxPrice}
                 placeholder={`${priceRange.max}`}
-                aria-label="Maximum price"
+                aria-label={t("maxPrice")}
                 className={fieldClass}
               />
               <Button type="submit" variant="outline" className="shrink-0">
-                Go
+                {t("go")}
               </Button>
             </form>
           </Section>
 
-          <Section title="Room type">
+          <Section title={t("roomType")}>
             {ROOM_CATEGORIES.map((category) => (
               <Checkbox
-                key={category.value}
-                label={category.label}
-                checked={filters.rooms.includes(category.value)}
-                onChange={() => update((params) => toggleValue(params, "room", category.value))}
+                key={category}
+                label={tRoom(category)}
+                checked={filters.rooms.includes(category)}
+                onChange={() => update((params) => toggleValue(params, "room", category))}
               />
             ))}
           </Section>
 
-          <Section title="Bills">
+          <Section title={t("bills")}>
             <Checkbox
-              label="All bills included"
+              label={t("allBills")}
               checked={filters.bills}
               onChange={() =>
                 update((params) => {
@@ -185,11 +190,11 @@ export function ListingFilters({
             />
           </Section>
 
-          <Section title="Amenities">
+          <Section title={t("amenities")}>
             {FILTERABLE_AMENITIES.map((amenity) => (
               <Checkbox
                 key={amenity}
-                label={AMENITIES[amenity].label}
+                label={tAmenity(amenity)}
                 checked={filters.amenities.includes(amenity)}
                 onChange={() => update((params) => toggleValue(params, "amenity", amenity))}
               />
@@ -199,7 +204,7 @@ export function ListingFilters({
 
         <div className="border-t border-line p-4 lg:hidden">
           <Button size="lg" onClick={() => setMobileOpen(false)} className="w-full">
-            {isPending ? "Updating…" : `Show ${resultCount} ${resultCount === 1 ? "home" : "homes"}`}
+            {isPending ? t("updatingEllipsis") : t("show", { count: resultCount })}
           </Button>
         </div>
       </div>

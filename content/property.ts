@@ -1,65 +1,50 @@
 // Property-page copy that's generic across listings, kept out of the page component.
+// The wording itself lives in messages/*.json ("policies", "propertyFaq").
+import { getTranslations } from "next-intl/server";
 import type { FaqItem } from "@/components/Faq";
 
 type PolicyInput = { badges: string[] };
 
-export function propertyPolicies({ badges }: PolicyInput) {
+export async function propertyPolicies({ badges }: PolicyInput) {
+  const t = await getTranslations("policies");
   return [
     {
-      term: "Cancellation",
-      detail: badges.includes("No Visa, No Pay")
-        ? "Full refund if your visa is refused or you don't get a university place, with evidence."
-        : "Free cancellation within 14 days of booking. After that, a replacement tenant may be needed.",
+      term: t("cancellation"),
+      detail: badges.includes("No Visa, No Pay") ? t("cancellationNoVisa") : t("cancellationStandard"),
     },
     {
-      term: "Deposit",
-      detail: badges.includes("No deposit")
-        ? "No security deposit required."
-        : "Refundable deposit, held in a protection scheme and returned after move-out.",
+      term: t("deposit"),
+      detail: badges.includes("No deposit") ? t("depositNone") : t("depositStandard"),
     },
     {
-      term: "Payments",
-      detail: badges.includes("Flexible payments")
-        ? "Pay in full, per term, or in monthly instalments."
-        : "Rent is paid per term. Upfront payment may be needed without a guarantor.",
+      term: t("payments"),
+      detail: badges.includes("Flexible payments") ? t("paymentsFlexible") : t("paymentsStandard"),
     },
-    {
-      term: "Guarantor",
-      detail: "A local or international guarantor is usually required — we can help if you don't have one.",
-    },
+    { term: t("guarantor"), detail: t("guarantorText") },
   ];
 }
 
 type FaqInput = {
   propertyName: string;
   billsIncluded: boolean;
-  period: string;
+  period: "week" | "month";
+  /** Distance and travel time already formatted for display. */
   nearest?: { name: string; distance: string; travel: string };
 };
 
-export function propertyFaqs({ propertyName, billsIncluded, period, nearest }: FaqInput): FaqItem[] {
+export async function propertyFaqs({ propertyName, billsIncluded, period, nearest }: FaqInput): Promise<FaqItem[]> {
+  const t = await getTranslations("propertyFaq");
   return [
     {
       question: nearest
-        ? `How far is ${propertyName} from ${nearest.name}?`
-        : `How far is ${propertyName} from campus?`,
+        ? t("distanceQuestion", { property: propertyName, university: nearest.name })
+        : t("distanceQuestionGeneric", { property: propertyName }),
       answer: nearest
-        ? `About ${nearest.distance} — roughly ${nearest.travel}.`
-        : "See the location section for distances to nearby universities.",
+        ? t("distanceAnswer", { distance: nearest.distance, travel: nearest.travel })
+        : t("distanceAnswerGeneric"),
     },
-    {
-      question: "Are bills included?",
-      answer: billsIncluded
-        ? "Yes. Wi-Fi, electricity, water and heating are included in the rent."
-        : "No, so budget for utilities on top of rent.",
-    },
-    {
-      question: "Can I pay in instalments?",
-      answer: `Most students pay in instalments across the academic year. Rent is quoted per ${period}; we'll confirm the exact schedule.`,
-    },
-    {
-      question: "Can I see the room before booking?",
-      answer: "Virtual tours can be arranged on request. Send an enquiry and we'll organise one.",
-    },
+    { question: t("billsQuestion"), answer: billsIncluded ? t("billsYes") : t("billsNo") },
+    { question: t("instalmentsQuestion"), answer: t("instalmentsAnswer", { period }) },
+    { question: t("viewingQuestion"), answer: t("viewingAnswer") },
   ];
 }

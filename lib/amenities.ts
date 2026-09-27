@@ -1,33 +1,30 @@
-export type AmenityGroup = "In your room" | "Building & community" | "Safety & security";
+// Labels live in messages/*.json under "amenities" and "amenityGroups".
+export type AmenityGroup = "room" | "building" | "safety";
 
 export const AMENITIES = {
-  wifi: { label: "High-speed Wi-Fi", group: "In your room" },
-  furnished: { label: "Fully furnished", group: "In your room" },
-  desk: { label: "Study desk", group: "In your room" },
-  ac: { label: "Air conditioning", group: "In your room" },
-  tv: { label: "Smart TV", group: "In your room" },
-  gym: { label: "Gym", group: "Building & community" },
-  cinema: { label: "Cinema room", group: "Building & community" },
-  study_room: { label: "Study rooms", group: "Building & community" },
-  laundry: { label: "Laundry", group: "Building & community" },
-  bike_storage: { label: "Bike storage", group: "Building & community" },
-  common_room: { label: "Common room", group: "Building & community" },
-  rooftop: { label: "Rooftop terrace", group: "Building & community" },
-  games_room: { label: "Games room", group: "Building & community" },
-  cafe: { label: "On-site café", group: "Building & community" },
-  parking: { label: "Parking", group: "Building & community" },
-  cctv: { label: "24/7 CCTV", group: "Safety & security" },
-  onsite_staff: { label: "On-site staff", group: "Safety & security" },
-  keycard: { label: "Key-card entry", group: "Safety & security" },
-} as const satisfies Record<string, { label: string; group: AmenityGroup }>;
+  wifi: { group: "room" },
+  furnished: { group: "room" },
+  desk: { group: "room" },
+  ac: { group: "room" },
+  tv: { group: "room" },
+  gym: { group: "building" },
+  cinema: { group: "building" },
+  study_room: { group: "building" },
+  laundry: { group: "building" },
+  bike_storage: { group: "building" },
+  common_room: { group: "building" },
+  rooftop: { group: "building" },
+  games_room: { group: "building" },
+  cafe: { group: "building" },
+  parking: { group: "building" },
+  cctv: { group: "safety" },
+  onsite_staff: { group: "safety" },
+  keycard: { group: "safety" },
+} as const satisfies Record<string, { group: AmenityGroup }>;
 
 export type AmenityKey = keyof typeof AMENITIES;
 
-export const AMENITY_GROUPS: AmenityGroup[] = [
-  "In your room",
-  "Building & community",
-  "Safety & security",
-];
+export const AMENITY_GROUPS: AmenityGroup[] = ["room", "building", "safety"];
 
 /** Every property has these, so cards don't bother showing them. */
 export const BASIC_AMENITIES: AmenityKey[] = ["wifi", "furnished", "desk", "cctv", "keycard"];

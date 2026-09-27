@@ -1,0 +1,373 @@
+{
+  "site": {
+    "tagline": "Find your student home near campus.",
+    "description": "Compare verified rooms, studios and apartments close to top universities in the UK, Australia, Canada and the USA.",
+    "promises": ["Verified listings", "Free expert help", "No visa, no pay"]
+  },
+  "common": {
+    "periodShort": "{period, select, month {mo} other {wk}}",
+    "periodLong": "{period, select, month {month} other {week}}",
+    "tenancy": "{period, select, month {{count, plural, one {# month} other {# months}}} other {{count, plural, one {# week} other {# weeks}}}}",
+    "travel": "{mode, select, walk {{minutes} min walk} other {{minutes} min by transit}}",
+    "homes": "{count, plural, one {# home} other {# homes}}",
+    "fromPrice": "From <price></price> /{period}",
+    "soldOut": "Sold out",
+    "billsIncluded": "Bills included",
+    "exampleListing": "Example listing",
+    "close": "Close",
+    "done": "Done",
+    "sending": "Sending…",
+    "home": "Home",
+    "breadcrumb": "Breadcrumb",
+    "optional": "optional",
+    "somethingWrong": "Something went wrong on our side. Please try again.",
+    "fixFields": "Please fix the highlighted fields."
+  },
+  "header": {
+    "homeLabel": "Home",
+    "destinations": "Destinations",
+    "getExpertHelp": "Get expert help",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "footer": {
+    "disclaimer": "Prototype — properties, prices and reviews are demo data.",
+    "privacy": "Privacy"
+  },
+  "language": {
+    "label": "Language",
+    "switchTo": "Switch language to {language}"
+  },
+  "search": {
+    "placeholder": "City, university or property",
+    "button": "Search",
+    "noMatches": "No matches for “{query}”.",
+    "types": {
+      "country": "Country",
+      "city": "City",
+      "university": "University",
+      "property": "Property"
+    }
+  },
+  "home": {
+    "title": "Find your student home <highlight>near campus</highlight>.",
+    "popular": "Popular:",
+    "exploreTitle": "Explore by city",
+    "exploreDescription": "Rent is shown the way each market quotes it — per week or per month.",
+    "cityStats": "{homes, plural, one {# home} other {# homes}} · {universities, plural, one {# university} other {# universities}}",
+    "topRatedTitle": "Top-rated homes",
+    "topRatedDescription": "What students are enquiring about this week.",
+    "howItWorksTitle": "How it works",
+    "howItWorks": [
+      {
+        "title": "Search",
+        "text": "Compare verified rooms by price, room type and distance to your university."
+      },
+      {
+        "title": "Ask an expert",
+        "text": "Send one enquiry. A housing expert replies within 24 hours to help you choose — free."
+      },
+      {
+        "title": "Move in",
+        "text": "We handle the paperwork with the property, so you arrive to a room that's ready."
+      }
+    ],
+    "faqTitle": "Questions, answered",
+    "faqDescription": "Can't see yours? Our experts reply within 24 hours.",
+    "faqs": [
+      {
+        "question": "Is it free to use?",
+        "answer": "Yes. Searching, comparing and getting help from our housing experts is free for students. Properties pay us when a booking is made."
+      },
+      {
+        "question": "When should I book?",
+        "answer": "Popular rooms near big universities often sell out 4–6 months before term starts, so we recommend enquiring as soon as you have an offer."
+      },
+      {
+        "question": "What if my visa is refused?",
+        "answer": "Properties marked “No Visa, No Pay” refund your booking if your visa is refused. Each property page lists its cancellation policy."
+      },
+      {
+        "question": "Are bills included?",
+        "answer": "Many properties include Wi-Fi, electricity, water and heating. Look for “Bills included” on listings, or use the filter."
+      },
+      {
+        "question": "Do I need a guarantor?",
+        "answer": "Some properties require one. If you don't have a guarantor, many accept upfront payment or an international guarantor service — we can advise."
+      }
+    ],
+    "ctaTitle": "Not sure where to start?",
+    "ctaText": "Tell us your university and budget — we'll send a free shortlist within 24 hours.",
+    "ctaButton": "Get my free shortlist"
+  },
+  "country": {
+    "metaTitle": "Student accommodation in {country}",
+    "title": "Student homes in <highlight>{country}</highlight>",
+    "summary": "{cities, plural, one {# city} other {# cities}} · Prices in {currency} per {period, select, month {month} other {week}}",
+    "nearUniversity": "Near university"
+  },
+  "city": {
+    "metaTitle": "Student accommodation in {city}",
+    "metaDescription": "Compare verified student rooms, studios and apartments in {city}, {country}.",
+    "title": "Student homes in <highlight>{city}</highlight>",
+    "nearUniversity": "Near {university}, closest first.",
+    "summary": "{homes, plural, one {# verified home} other {# verified homes}} near {universities, plural, one {# university} other {# universities}}.",
+    "results": "Results",
+    "resultCount": "{count, plural, one {# home} other {# homes}}",
+    "ofTotal": " of {total}",
+    "emptyTitle": "No homes match those filters",
+    "emptyText": "Try a wider price range or fewer filters — or let an expert search for you.",
+    "clearFilters": "Clear filters",
+    "askExpert": "Ask an expert",
+    "shortlistText": "Can't find the right room in {city}? We'll send you a free shortlist.",
+    "shortlistButton": "Get a shortlist"
+  },
+  "filters": {
+    "button": "Filters",
+    "title": "Filters",
+    "updating": "Updating",
+    "updatingEllipsis": "Updating…",
+    "clearAll": "Clear all",
+    "close": "Close filters",
+    "nearUniversity": "Near university",
+    "anyUniversity": "Any university",
+    "price": "Price per {period, select, month {month} other {week}} ({symbol})",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "go": "Go",
+    "roomType": "Room type",
+    "bills": "Bills",
+    "allBills": "All bills included",
+    "amenities": "Amenities",
+    "show": "Show {count, plural, one {# home} other {# homes}}"
+  },
+  "sort": {
+    "label": "Sort homes",
+    "relevance": "Recommended",
+    "price_asc": "Price: low to high",
+    "price_desc": "Price: high to low",
+    "distance": "Distance to university"
+  },
+  "roomCategories": {
+    "SHARED": "Shared room",
+    "ENSUITE": "Ensuite",
+    "STUDIO": "Studio",
+    "APARTMENT": "Apartment"
+  },
+  "amenityGroups": {
+    "room": "In your room",
+    "building": "Building & community",
+    "safety": "Safety & security"
+  },
+  "amenities": {
+    "wifi": "High-speed Wi-Fi",
+    "furnished": "Fully furnished",
+    "desk": "Study desk",
+    "ac": "Air conditioning",
+    "tv": "Smart TV",
+    "gym": "Gym",
+    "cinema": "Cinema room",
+    "study_room": "Study rooms",
+    "laundry": "Laundry",
+    "bike_storage": "Bike storage",
+    "common_room": "Common room",
+    "rooftop": "Rooftop terrace",
+    "games_room": "Games room",
+    "cafe": "On-site café",
+    "parking": "Parking",
+    "cctv": "24/7 CCTV",
+    "onsite_staff": "On-site staff",
+    "keycard": "Key-card entry"
+  },
+  "badges": {
+    "noVisaNoPay": "No Visa, No Pay",
+    "flexiblePayments": "Flexible payments",
+    "verifiedProperty": "Verified property",
+    "priceMatch": "Price match",
+    "noDeposit": "No deposit"
+  },
+  "propertyTypes": {
+    "studentResidence": "Student residence",
+    "privateApartment": "Private apartment"
+  },
+  "propertyCard": {
+    "ratingSr": "out of 5 from {count} reviews"
+  },
+  "property": {
+    "reviewsLink": "{count} reviews",
+    "roomsTitle": "Rooms and prices",
+    "includedTitle": "What's included",
+    "locationTitle": "Location",
+    "reviewsTitle": "Reviews",
+    "reviewsAverage": "average from {count} students",
+    "goodToKnowTitle": "Good to know",
+    "questionsTitle": "Questions",
+    "soldOutWaitlist": "Currently sold out — join the waitlist",
+    "askAboutAvailability": "Ask an expert about availability and contracts.",
+    "moreHomes": "More homes in {city}",
+    "enquire": "Enquire",
+    "joinWaitlist": "Join waitlist",
+    "roomDetails": "{category} · {size} m² · {tenancy}"
+  },
+  "gallery": {
+    "open": "Open photo {index} of {total}",
+    "photoAlt": "{name} photo {index}",
+    "all": "All {count} photos",
+    "dialog": "{name} photos",
+    "close": "Close photos",
+    "previous": "Previous photo",
+    "next": "Next photo"
+  },
+  "policies": {
+    "cancellation": "Cancellation",
+    "cancellationNoVisa": "Full refund if your visa is refused or you don't get a university place, with evidence.",
+    "cancellationStandard": "Free cancellation within 14 days of booking. After that, a replacement tenant may be needed.",
+    "deposit": "Deposit",
+    "depositNone": "No security deposit required.",
+    "depositStandard": "Refundable deposit, held in a protection scheme and returned after move-out.",
+    "payments": "Payments",
+    "paymentsFlexible": "Pay in full, per term, or in monthly instalments.",
+    "paymentsStandard": "Rent is paid per term. Upfront payment may be needed without a guarantor.",
+    "guarantor": "Guarantor",
+    "guarantorText": "A local or international guarantor is usually required — we can help if you don't have one."
+  },
+  "propertyFaq": {
+    "distanceQuestion": "How far is {property} from {university}?",
+    "distanceQuestionGeneric": "How far is {property} from campus?",
+    "distanceAnswer": "About {distance} — roughly {travel}.",
+    "distanceAnswerGeneric": "See the location section for distances to nearby universities.",
+    "billsQuestion": "Are bills included?",
+    "billsYes": "Yes. Wi-Fi, electricity, water and heating are included in the rent.",
+    "billsNo": "No, so budget for utilities on top of rent.",
+    "instalmentsQuestion": "Can I pay in instalments?",
+    "instalmentsAnswer": "Most students pay in instalments across the academic year. Rent is quoted per {period, select, month {month} other {week}}; we'll confirm the exact schedule.",
+    "viewingQuestion": "Can I see the room before booking?",
+    "viewingAnswer": "Virtual tours can be arranged on request. Send an enquiry and we'll organise one."
+  },
+  "benchmark": {
+    "title": "Real rents in {city}",
+    "range": "<strong>{range}</strong> per {period, select, month {month} other {week}} · {asOf}",
+    "from": "from {price}"
+  },
+  "enquiry": {
+    "modalTitle": "Tell us what you need",
+    "modalDescription": "We'll shortlist rooms that fit your budget and university.",
+    "sentTitle": "Enquiry sent",
+    "sentText": "An expert will reply within 24 hours.",
+    "sentTextProperty": "An expert will reply within 24 hours about {property}.",
+    "sendAnother": "Send another",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone, WhatsApp or Viber (optional)",
+    "city": "City",
+    "cityPlaceholder": "e.g. London",
+    "moveIn": "Move in",
+    "notSure": "Not sure yet",
+    "room": "Room",
+    "anyRoom": "Any room",
+    "message": "Message (optional)",
+    "messagePlaceholder": "Budget, university, questions…",
+    "submit": "Send enquiry",
+    "reassurance": "Free · No obligation · Reply within 24 hours",
+    "errors": {
+      "name": "Please enter your full name.",
+      "email": "Please enter a valid email address.",
+      "phone": "Use digits, spaces, brackets and + only.",
+      "tooLong": "This is too long."
+    }
+  },
+  "feedback": {
+    "tab": "Feedback",
+    "title": "How's this working for you?",
+    "description": "This is an early prototype — honest feedback is the most useful kind.",
+    "thanksTitle": "Thank you!",
+    "thanksText": "Your feedback helps us decide what to build next.",
+    "wouldUse": "Would you use this to find a room?",
+    "yes": "Yes",
+    "maybe": "Maybe",
+    "no": "No",
+    "message": "What worked? What was confusing or missing?",
+    "email": "Email (optional — if we can follow up)",
+    "submit": "Send feedback",
+    "errors": {
+      "message": "Tell us a little more — even a sentence helps.",
+      "messageTooLong": "Please keep it under 2000 characters.",
+      "email": "Please enter a valid email, or leave it blank."
+    }
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "dialogTitle": "Sign in or create an account",
+    "dialogDescription": "Save your details, get faster replies and pick up where you left off.",
+    "google": "Continue with Google",
+    "or": "or",
+    "email": "Email",
+    "emailLink": "Email me a sign-in link",
+    "emailInvalid": "Please enter a valid email address.",
+    "checkInboxTitle": "Check your inbox",
+    "checkInboxText": "We sent a sign-in link to {email}. It expires in 15 minutes.",
+    "useDifferentEmail": "Use a different email",
+    "error": "We couldn't sign you in. Please try again.",
+    "terms": "By continuing you agree to our <privacy>privacy notice</privacy>.",
+    "account": "Account",
+    "myProfile": "My profile",
+    "signOut": "Sign out",
+    "linkEmailSubject": "Your {site} sign-in link",
+    "linkEmailHeading": "Sign in to {site}",
+    "linkEmailBody": "Click the button below to sign in. The link expires in 15 minutes and can only be used once.",
+    "linkEmailButton": "Sign in",
+    "linkEmailIgnore": "If you didn't ask for this, you can ignore this email."
+  },
+  "account": {
+    "metaTitle": "My profile",
+    "title": "My profile",
+    "description": "Keep your details up to date so housing experts can find the right room for you.",
+    "welcomeMetaTitle": "Welcome",
+    "welcomeTitle": "Welcome to {site}!",
+    "welcomeDescription": "Tell us about your plans and we'll match you with rooms that fit. It takes a minute.",
+    "skip": "Skip for now",
+    "contactSection": "Contact",
+    "plansSection": "Your study plans",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Mobile number (WhatsApp / Viber)",
+    "phonePlaceholder": "+63 9XX XXX XXXX",
+    "nationality": "Nationality",
+    "destinationCountry": "Where do you want to study?",
+    "anyCountry": "Not decided yet",
+    "destinationCity": "City",
+    "cityPlaceholder": "e.g. Sydney",
+    "university": "University",
+    "universityPlaceholder": "e.g. University of Sydney",
+    "studyStart": "When do you move?",
+    "notSure": "Not sure yet",
+    "budget": "Budget for rent",
+    "budgetPlaceholder": "e.g. A$400 per week or ₱60,000 per month",
+    "consent": "Share my details with accommodation providers so they can contact me about rooms.",
+    "privacyNote": "We only share your details with the properties you're interested in, and only if you tick the box above. You can change this or ask us to delete your data at any time. <privacy>Privacy notice</privacy>",
+    "save": "Save profile",
+    "saveContinue": "Save and continue",
+    "saved": "Saved.",
+    "errors": {
+      "name": "Please enter your full name.",
+      "phone": "Use digits, spaces, brackets and + only.",
+      "tooLong": "This is too long."
+    }
+  },
+  "privacy": {
+    "metaTitle": "Privacy notice",
+    "title": "Privacy notice",
+    "intro": "{site} is a prototype. This notice explains what we collect and why, in line with the Philippine Data Privacy Act of 2012 (RA 10173) and similar laws where you live.",
+    "collectTitle": "What we collect",
+    "collect": "Your name, email and, if you give them, phone number, nationality, study plans and budget. We also record the steps you take on the site — searches, cities and homes you view, rooms you pick and enquiries you send — so our experts can help you faster.",
+    "useTitle": "How we use it",
+    "use": "To reply to your enquiries, recommend rooms, and improve the site. If you agree, we share your contact details and study plans with accommodation providers so they can contact you. We never sell your data.",
+    "rightsTitle": "Your rights",
+    "rights": "You can see, correct or delete your data, or withdraw consent, at any time from your profile or by emailing {email}."
+  },
+  "notFound": {
+    "title": "We couldn't find that page",
+    "text": "The home or city may have moved. Try searching instead.",
+    "back": "Back to home"
+  }
+}

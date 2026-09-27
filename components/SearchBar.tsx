@@ -2,8 +2,10 @@
 
 import { Building, Globe, GraduationCap, LoaderCircle, MapPin, Search, type LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { buttonClass } from "@/components/ui/Button";
+import { track } from "@/app/actions/track";
 import type { SearchResult } from "@/lib/constants";
 import { cx } from "@/lib/cx";
 
@@ -14,7 +16,9 @@ const TYPE_ICONS: Record<SearchResult["type"], LucideIcon> = {
   property: Building,
 };
 
-export function SearchBar({ placeholder = "City, university or property" }: { placeholder?: string }) {
+export function SearchBar({ placeholder }: { placeholder?: string }) {
+  const t = useTranslations("search");
+  placeholder ??= t("placeholder");
   const router = useRouter();
   const listId = useId();
   const [query, setQuery] = useState("");
@@ -66,6 +70,7 @@ export function SearchBar({ placeholder = "City, university or property" }: { pl
   }
 
   function go(result: SearchResult) {
+    track("search", { query: query.trim(), choice: result.label, type: result.type, href: result.href });
     setOpen(false);
     setQuery(result.label);
     router.push(result.href);
@@ -121,7 +126,7 @@ export function SearchBar({ placeholder = "City, university or property" }: { pl
         />
         {loading && <LoaderCircle className="mr-2 size-4 animate-spin text-muted" aria-hidden />}
         <button type="submit" className={buttonClass({ variant: "accent", size: "lg" })}>
-          Search
+          {t("button")}
         </button>
       </div>
 
@@ -150,15 +155,15 @@ export function SearchBar({ placeholder = "City, university or property" }: { pl
                 </span>
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-semibold text-ink">{result.label}</span>
-                  <span className="block truncate text-xs capitalize text-muted">
-                    {result.type} · {result.sublabel}
+                  <span className="block truncate text-xs text-muted">
+                    {result.type === "country" ? t("types.country") : `${t(`types.${result.type}`)} · ${result.sublabel}`}
                   </span>
                 </span>
               </li>
             );
           })}
           {!loading && results.length === 0 && (
-            <li className="px-3 py-2.5 text-sm text-muted">No matches for “{query.trim()}”.</li>
+            <li className="px-3 py-2.5 text-sm text-muted">{t("noMatches", { query: query.trim() })}</li>
           )}
         </ul>
       )}

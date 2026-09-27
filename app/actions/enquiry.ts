@@ -1,7 +1,12 @@
 "use server";
 
+import { cookies, headers } from "next/headers";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod";
+import { pathFromUrl, recordEvent } from "@/lib/journey";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/session";
+import { ANON_COOKIE } from "@/lib/tracking";
 
 export type EnquiryField = "name" | "email" | "phone" | "city" | "moveInMonth" | "roomTypeName" | "message";
 
@@ -13,41 +18,44 @@ export type EnquiryState = {
   values?: Partial<Record<EnquiryField, string>>;
 };
 
-const optionalText = (max: number, label: string) =>
-  z.string().max(max, `${label} is too long.`).optional();
-
-const enquirySchema = z.object({
-  name: z.string().min(2, "Please enter your full name.").max(100, "Name is too long."),
-  email: z.email("Please enter a valid email address."),
-  phone: z
-    .string()
-    .max(30, "Phone number is too long.")
-    .regex(/^[+\d\s()-]+$/, "Use digits, spaces, brackets and + only.")
-    .optional(),
-  city: optionalText(80, "City"),
-  moveInMonth: optionalText(20, "Move-in month"),
-  roomTypeName: optionalText(80, "Room type"),
-  message: optionalText(1000, "Message"),
-  propertyId: z.coerce.number().int().positive().optional(),
-});
+async function enquirySchema() {
+  const t = await getTranslations("enquiry.errors");
+  const optionalText = (max: number) => z.string().max(max, t("tooLong")).optional();
+  return z.object({
+    name: z.string().min(2, t("name")).max(100, t("tooLong")),
+    email: z.email(t("email")),
+    phone: z
+      .string()
+      .max(30, t("tooLong"))
+      .regex(/^[+\d\s()-]+$/, t("phone"))
+      .optional(),
+    city: optionalText(80),
+    moveInMonth: optionalText(20),
+    roomTypeName: optionalText(80),
+    message: optionalText(1000),
+    propertyId: z.coerce.number().int().positive().optional(),
+  });
+}
 
 const REQUIRED = new Set(["name", "email"]);
 
 export async function submitEnquiry(_prev: EnquiryState, formData: FormData): Promise<EnquiryState> {
+  const [schema, tCommon] = await Promise.all([enquirySchema(), getTranslations("common")]);
+
   // Trim everything; blank optional fields become undefined so they're stored as NULL.
   const raw: Record<string, string | undefined> = {};
-  for (const key of [...Object.keys(enquirySchema.shape)]) {
+  for (const key of [...Object.keys(schema.shape)]) {
     const value = formData.get(key);
     const text = typeof value === "string" ? value.trim() : "";
     raw[key] = text || REQUIRED.has(key) ? text : undefined;
   }
 
-  const parsed = enquirySchema.safeParse(raw);
+  const parsed = schema.safeParse(raw);
   if (!parsed.success) {
     const { fieldErrors } = z.flattenError(parsed.error);
     return {
       status: "error",
-      message: "Please fix the highlighted fields.",
+      message: tCommon("fixFields"),
       values: raw,
       fieldErrors: Object.fromEntries(
         Object.entries(fieldErrors).map(([field, errors]) => [field, errors?.[0]]),
@@ -56,15 +64,42 @@ export async function submitEnquiry(_prev: EnquiryState, formData: FormData): Pr
   }
 
   const { propertyId, ...data } = parsed.data;
+  const [session, cookieStore, headerList] = await Promise.all([
+    getSession().catch(() => null),
+    cookies(),
+    headers(),
+  ]);
+  const userId = session?.user.id;
 
+  let property: { id: number; name: string } | null = null;
   try {
-    const property = propertyId
-      ? await prisma.property.findUnique({ where: { id: propertyId }, select: { id: true } })
+    property = propertyId
+      ? await prisma.property.findUnique({ where: { id: propertyId }, select: { id: true, name: true } })
       : null;
-    await prisma.enquiry.create({ data: { ...data, propertyId: property?.id } });
+    await prisma.enquiry.create({ data: { ...data, propertyId: property?.id, userId } });
+    // Fill in profile gaps from the enquiry, so the lead record stays complete.
+    if (userId && data.phone) {
+      await prisma.user.updateMany({ where: { id: userId, phone: null }, data: { phone: data.phone } });
+    }
   } catch (error) {
     console.error("Failed to save enquiry", error);
-    return { status: "error", message: "Something went wrong on our side. Please try again." };
+    return { status: "error", message: tCommon("somethingWrong") };
+  }
+
+  const anonymousId = cookieStore.get(ANON_COOKIE)?.value;
+  if (anonymousId || userId) {
+    await recordEvent({
+      type: "enquiry_sent",
+      anonymousId: anonymousId ?? `user:${userId}`,
+      userId,
+      path: pathFromUrl(headerList.get("referer")),
+      data: {
+        property: property?.name ?? null,
+        city: data.city ?? null,
+        room: data.roomTypeName ?? null,
+        moveIn: data.moveInMonth ?? null,
+      },
+    });
   }
 
   return { status: "success" };

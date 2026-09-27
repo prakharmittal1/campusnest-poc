@@ -1,0 +1,373 @@
+{
+  "site": {
+    "tagline": "Hanapin ang iyong student home malapit sa campus.",
+    "description": "Ikumpara ang mga verified na kuwarto, studio at apartment malapit sa mga nangungunang unibersidad sa UK, Australia, Canada at USA.",
+    "promises": ["Mga verified na listing", "Libreng tulong ng eksperto", "Walang visa, walang bayad"]
+  },
+  "common": {
+    "periodShort": "{period, select, month {buwan} other {linggo}}",
+    "periodLong": "{period, select, month {buwan} other {linggo}}",
+    "tenancy": "{period, select, month {{count} buwan} other {{count} linggo}}",
+    "travel": "{mode, select, walk {{minutes} min na lakad} other {{minutes} min sakay}}",
+    "homes": "{count, plural, one {# tirahan} other {# tirahan}}",
+    "fromPrice": "Mula <price></price> /{period}",
+    "soldOut": "Sold out",
+    "billsIncluded": "Kasama ang bills",
+    "exampleListing": "Halimbawang listing",
+    "close": "Isara",
+    "done": "Tapos na",
+    "sending": "Ipinapadala…",
+    "home": "Home",
+    "breadcrumb": "Breadcrumb",
+    "optional": "opsyonal",
+    "somethingWrong": "May nagkaproblema sa aming panig. Pakisubukang muli.",
+    "fixFields": "Pakiayos ang mga naka-highlight na field."
+  },
+  "header": {
+    "homeLabel": "Home",
+    "destinations": "Mga destinasyon",
+    "getExpertHelp": "Humingi ng tulong",
+    "openMenu": "Buksan ang menu",
+    "closeMenu": "Isara ang menu"
+  },
+  "footer": {
+    "disclaimer": "Prototype — ang mga property, presyo at review ay demo data lamang.",
+    "privacy": "Privacy"
+  },
+  "language": {
+    "label": "Wika",
+    "switchTo": "Palitan ang wika sa {language}"
+  },
+  "search": {
+    "placeholder": "Lungsod, unibersidad o property",
+    "button": "Hanapin",
+    "noMatches": "Walang tugma para sa “{query}”.",
+    "types": {
+      "country": "Bansa",
+      "city": "Lungsod",
+      "university": "Unibersidad",
+      "property": "Property"
+    }
+  },
+  "home": {
+    "title": "Hanapin ang iyong student home <highlight>malapit sa campus</highlight>.",
+    "popular": "Sikat:",
+    "exploreTitle": "Mag-explore ayon sa lungsod",
+    "exploreDescription": "Ipinapakita ang upa ayon sa nakasanayan sa bawat bansa — kada linggo o kada buwan.",
+    "cityStats": "{homes, plural, one {# tirahan} other {# tirahan}} · {universities, plural, one {# unibersidad} other {# unibersidad}}",
+    "topRatedTitle": "Mga pinakamataas ang rating",
+    "topRatedDescription": "Ang mga tinatanong ng mga estudyante ngayong linggo.",
+    "howItWorksTitle": "Paano ito gumagana",
+    "howItWorks": [
+      {
+        "title": "Maghanap",
+        "text": "Ikumpara ang mga verified na kuwarto ayon sa presyo, uri ng kuwarto at layo sa iyong unibersidad."
+      },
+      {
+        "title": "Magtanong sa eksperto",
+        "text": "Magpadala ng isang enquiry. Sasagot ang isang housing expert sa loob ng 24 oras para tulungan kang pumili — libre."
+      },
+      {
+        "title": "Lumipat",
+        "text": "Kami na ang bahala sa papeles sa property, kaya handa na ang kuwarto pagdating mo."
+      }
+    ],
+    "faqTitle": "Mga madalas itanong",
+    "faqDescription": "Wala rito ang tanong mo? Sasagot ang aming mga eksperto sa loob ng 24 oras.",
+    "faqs": [
+      {
+        "question": "Libre ba itong gamitin?",
+        "answer": "Oo. Libre para sa mga estudyante ang paghahanap, pagkukumpara at paghingi ng tulong sa aming mga housing expert. Ang mga property ang nagbabayad sa amin kapag may booking."
+      },
+      {
+        "question": "Kailan ako dapat mag-book?",
+        "answer": "Madalas maubos ang mga sikat na kuwarto malapit sa malalaking unibersidad 4–6 na buwan bago magsimula ang klase, kaya magtanong na agad kapag may offer ka na."
+      },
+      {
+        "question": "Paano kung ma-deny ang visa ko?",
+        "answer": "Ang mga property na may “No Visa, No Pay” ay nagre-refund ng booking kapag na-deny ang visa mo. Nakalista sa bawat property page ang cancellation policy nito."
+      },
+      {
+        "question": "Kasama ba ang bills?",
+        "answer": "Maraming property ang may kasamang Wi-Fi, kuryente, tubig at heating. Hanapin ang “Kasama ang bills” sa listing, o gamitin ang filter."
+      },
+      {
+        "question": "Kailangan ko ba ng guarantor?",
+        "answer": "May mga property na nangangailangan nito. Kung wala kang guarantor, marami ang tumatanggap ng upfront na bayad o international guarantor service — matutulungan ka namin."
+      }
+    ],
+    "ctaTitle": "Hindi alam kung saan magsisimula?",
+    "ctaText": "Sabihin sa amin ang iyong unibersidad at budget — magpapadala kami ng libreng shortlist sa loob ng 24 oras.",
+    "ctaButton": "Kunin ang libreng shortlist"
+  },
+  "country": {
+    "metaTitle": "Student accommodation sa {country}",
+    "title": "Mga student home sa <highlight>{country}</highlight>",
+    "summary": "{cities, plural, one {# lungsod} other {# lungsod}} · Presyo sa {currency} kada {period, select, month {buwan} other {linggo}}",
+    "nearUniversity": "Malapit sa unibersidad"
+  },
+  "city": {
+    "metaTitle": "Student accommodation sa {city}",
+    "metaDescription": "Ikumpara ang mga verified na kuwarto, studio at apartment para sa estudyante sa {city}, {country}.",
+    "title": "Mga student home sa <highlight>{city}</highlight>",
+    "nearUniversity": "Malapit sa {university}, pinakamalapit muna.",
+    "summary": "{homes, plural, one {# verified na tirahan} other {# verified na tirahan}} malapit sa {universities, plural, one {# unibersidad} other {# unibersidad}}.",
+    "results": "Mga resulta",
+    "resultCount": "{count, plural, one {# tirahan} other {# tirahan}}",
+    "ofTotal": " sa {total}",
+    "emptyTitle": "Walang tirahang tugma sa mga filter",
+    "emptyText": "Subukan ang mas malawak na presyo o bawasan ang filter — o hayaan ang eksperto na maghanap para sa iyo.",
+    "clearFilters": "I-clear ang filter",
+    "askExpert": "Magtanong sa eksperto",
+    "shortlistText": "Hindi mahanap ang tamang kuwarto sa {city}? Padadalhan ka namin ng libreng shortlist.",
+    "shortlistButton": "Kumuha ng shortlist"
+  },
+  "filters": {
+    "button": "Mga filter",
+    "title": "Mga filter",
+    "updating": "Ina-update",
+    "updatingEllipsis": "Ina-update…",
+    "clearAll": "I-clear lahat",
+    "close": "Isara ang filter",
+    "nearUniversity": "Malapit sa unibersidad",
+    "anyUniversity": "Kahit anong unibersidad",
+    "price": "Presyo kada {period, select, month {buwan} other {linggo}} ({symbol})",
+    "minPrice": "Pinakamababang presyo",
+    "maxPrice": "Pinakamataas na presyo",
+    "go": "Go",
+    "roomType": "Uri ng kuwarto",
+    "bills": "Bills",
+    "allBills": "Kasama lahat ng bills",
+    "amenities": "Amenities",
+    "show": "Ipakita ang {count, plural, one {# tirahan} other {# tirahan}}"
+  },
+  "sort": {
+    "label": "Ayusin ang mga tirahan",
+    "relevance": "Inirerekomenda",
+    "price_asc": "Presyo: mababa hanggang mataas",
+    "price_desc": "Presyo: mataas hanggang mababa",
+    "distance": "Layo sa unibersidad"
+  },
+  "roomCategories": {
+    "SHARED": "Shared na kuwarto",
+    "ENSUITE": "Ensuite",
+    "STUDIO": "Studio",
+    "APARTMENT": "Apartment"
+  },
+  "amenityGroups": {
+    "room": "Sa iyong kuwarto",
+    "building": "Gusali at komunidad",
+    "safety": "Kaligtasan at seguridad"
+  },
+  "amenities": {
+    "wifi": "Mabilis na Wi-Fi",
+    "furnished": "Fully furnished",
+    "desk": "Study desk",
+    "ac": "Aircon",
+    "tv": "Smart TV",
+    "gym": "Gym",
+    "cinema": "Cinema room",
+    "study_room": "Mga study room",
+    "laundry": "Labahan",
+    "bike_storage": "Paradahan ng bisikleta",
+    "common_room": "Common room",
+    "rooftop": "Rooftop terrace",
+    "games_room": "Games room",
+    "cafe": "Café sa loob",
+    "parking": "Paradahan",
+    "cctv": "24/7 na CCTV",
+    "onsite_staff": "May staff sa loob",
+    "keycard": "Key-card na pasukan"
+  },
+  "badges": {
+    "noVisaNoPay": "No Visa, No Pay",
+    "flexiblePayments": "Flexible na bayad",
+    "verifiedProperty": "Verified na property",
+    "priceMatch": "Price match",
+    "noDeposit": "Walang deposit"
+  },
+  "propertyTypes": {
+    "studentResidence": "Student residence",
+    "privateApartment": "Pribadong apartment"
+  },
+  "propertyCard": {
+    "ratingSr": "sa 5 mula sa {count} review"
+  },
+  "property": {
+    "reviewsLink": "{count} review",
+    "roomsTitle": "Mga kuwarto at presyo",
+    "includedTitle": "Ano ang kasama",
+    "locationTitle": "Lokasyon",
+    "reviewsTitle": "Mga review",
+    "reviewsAverage": "average mula sa {count} estudyante",
+    "goodToKnowTitle": "Dapat mong malaman",
+    "questionsTitle": "Mga tanong",
+    "soldOutWaitlist": "Sold out ngayon — sumali sa waitlist",
+    "askAboutAvailability": "Magtanong sa eksperto tungkol sa availability at kontrata.",
+    "moreHomes": "Iba pang tirahan sa {city}",
+    "enquire": "Magtanong",
+    "joinWaitlist": "Sumali sa waitlist",
+    "roomDetails": "{category} · {size} m² · {tenancy}"
+  },
+  "gallery": {
+    "open": "Buksan ang larawan {index} ng {total}",
+    "photoAlt": "Larawan {index} ng {name}",
+    "all": "Lahat ng {count} larawan",
+    "dialog": "Mga larawan ng {name}",
+    "close": "Isara ang mga larawan",
+    "previous": "Nakaraang larawan",
+    "next": "Susunod na larawan"
+  },
+  "policies": {
+    "cancellation": "Pagkansela",
+    "cancellationNoVisa": "Buong refund kapag na-deny ang visa mo o hindi ka natanggap sa unibersidad, basta may patunay.",
+    "cancellationStandard": "Libreng pagkansela sa loob ng 14 na araw mula sa booking. Pagkatapos nito, maaaring kailanganin ng kapalit na tenant.",
+    "deposit": "Deposit",
+    "depositNone": "Walang kailangang security deposit.",
+    "depositStandard": "Refundable na deposit, nakatago sa isang protection scheme at ibabalik pagkatapos mong umalis.",
+    "payments": "Bayad",
+    "paymentsFlexible": "Magbayad nang buo, kada term, o buwanang hulog.",
+    "paymentsStandard": "Binabayaran ang upa kada term. Maaaring kailanganin ang upfront na bayad kung walang guarantor.",
+    "guarantor": "Guarantor",
+    "guarantorText": "Karaniwang kailangan ng lokal o international na guarantor — matutulungan ka namin kung wala ka nito."
+  },
+  "propertyFaq": {
+    "distanceQuestion": "Gaano kalayo ang {property} sa {university}?",
+    "distanceQuestionGeneric": "Gaano kalayo ang {property} sa campus?",
+    "distanceAnswer": "Mga {distance} — humigit-kumulang {travel}.",
+    "distanceAnswerGeneric": "Tingnan ang seksyon ng lokasyon para sa layo sa mga kalapit na unibersidad.",
+    "billsQuestion": "Kasama ba ang bills?",
+    "billsYes": "Oo. Kasama sa upa ang Wi-Fi, kuryente, tubig at heating.",
+    "billsNo": "Hindi, kaya maglaan ng budget para sa utilities bukod sa upa.",
+    "instalmentsQuestion": "Puwede bang hulugan ang bayad?",
+    "instalmentsAnswer": "Karamihan ng estudyante ay naghuhulog sa buong school year. Ang upa ay kada {period, select, month {buwan} other {linggo}}; kukumpirmahin namin ang eksaktong schedule.",
+    "viewingQuestion": "Puwede ko bang makita ang kuwarto bago mag-book?",
+    "viewingAnswer": "Puwedeng mag-ayos ng virtual tour kapag hiniling. Magpadala ng enquiry at aayusin namin ito."
+  },
+  "benchmark": {
+    "title": "Totoong upa sa {city}",
+    "range": "<strong>{range}</strong> kada {period, select, month {buwan} other {linggo}} · {asOf}",
+    "from": "mula {price}"
+  },
+  "enquiry": {
+    "modalTitle": "Sabihin sa amin ang kailangan mo",
+    "modalDescription": "Gagawa kami ng shortlist ng mga kuwartong pasok sa budget at unibersidad mo.",
+    "sentTitle": "Naipadala ang enquiry",
+    "sentText": "Sasagot ang isang eksperto sa loob ng 24 oras.",
+    "sentTextProperty": "Sasagot ang isang eksperto sa loob ng 24 oras tungkol sa {property}.",
+    "sendAnother": "Magpadala ulit",
+    "name": "Buong pangalan",
+    "email": "Email",
+    "phone": "Telepono, WhatsApp o Viber (opsyonal)",
+    "city": "Lungsod",
+    "cityPlaceholder": "hal. London",
+    "moveIn": "Paglipat",
+    "notSure": "Hindi pa sigurado",
+    "room": "Kuwarto",
+    "anyRoom": "Kahit anong kuwarto",
+    "message": "Mensahe (opsyonal)",
+    "messagePlaceholder": "Budget, unibersidad, mga tanong…",
+    "submit": "Ipadala ang enquiry",
+    "reassurance": "Libre · Walang obligasyon · Sagot sa loob ng 24 oras",
+    "errors": {
+      "name": "Pakilagay ang iyong buong pangalan.",
+      "email": "Pakilagay ang tamang email address.",
+      "phone": "Numero, espasyo, bracket at + lang ang puwede.",
+      "tooLong": "Masyadong mahaba."
+    }
+  },
+  "feedback": {
+    "tab": "Feedback",
+    "title": "Kumusta ang karanasan mo?",
+    "description": "Maagang prototype pa lang ito — pinakamahalaga sa amin ang tapat na feedback.",
+    "thanksTitle": "Salamat!",
+    "thanksText": "Tinutulungan kami ng feedback mo na magpasya kung ano ang susunod na gagawin.",
+    "wouldUse": "Gagamitin mo ba ito para maghanap ng kuwarto?",
+    "yes": "Oo",
+    "maybe": "Siguro",
+    "no": "Hindi",
+    "message": "Ano ang gumana? Ano ang nakakalito o kulang?",
+    "email": "Email (opsyonal — para makabalik kami sa iyo)",
+    "submit": "Ipadala ang feedback",
+    "errors": {
+      "message": "Magkuwento pa nang kaunti — kahit isang pangungusap ay malaking tulong.",
+      "messageTooLong": "Pakipaikli sa 2000 character.",
+      "email": "Pakilagay ang tamang email, o iwanang blangko."
+    }
+  },
+  "auth": {
+    "signIn": "Mag-sign in",
+    "dialogTitle": "Mag-sign in o gumawa ng account",
+    "dialogDescription": "I-save ang iyong detalye, makakuha ng mas mabilis na sagot at ituloy kung saan ka tumigil.",
+    "google": "Magpatuloy gamit ang Google",
+    "or": "o",
+    "email": "Email",
+    "emailLink": "I-email sa akin ang sign-in link",
+    "emailInvalid": "Pakilagay ang tamang email address.",
+    "checkInboxTitle": "Tingnan ang iyong inbox",
+    "checkInboxText": "Nagpadala kami ng sign-in link sa {email}. Mag-e-expire ito sa loob ng 15 minuto.",
+    "useDifferentEmail": "Gumamit ng ibang email",
+    "error": "Hindi ka namin ma-sign in. Pakisubukang muli.",
+    "terms": "Sa pagpapatuloy, sumasang-ayon ka sa aming <privacy>privacy notice</privacy>.",
+    "account": "Account",
+    "myProfile": "Aking profile",
+    "signOut": "Mag-sign out",
+    "linkEmailSubject": "Ang iyong {site} sign-in link",
+    "linkEmailHeading": "Mag-sign in sa {site}",
+    "linkEmailBody": "I-click ang button sa ibaba para mag-sign in. Mag-e-expire ang link sa loob ng 15 minuto at isang beses lang magagamit.",
+    "linkEmailButton": "Mag-sign in",
+    "linkEmailIgnore": "Kung hindi mo ito hiniling, puwede mong balewalain ang email na ito."
+  },
+  "account": {
+    "metaTitle": "Aking profile",
+    "title": "Aking profile",
+    "description": "Panatilihing updated ang iyong detalye para mahanap ng mga housing expert ang tamang kuwarto para sa iyo.",
+    "welcomeMetaTitle": "Maligayang pagdating",
+    "welcomeTitle": "Maligayang pagdating sa {site}!",
+    "welcomeDescription": "Ikuwento sa amin ang iyong plano at ihahanap ka namin ng mga kuwartong bagay sa iyo. Isang minuto lang ito.",
+    "skip": "Laktawan muna",
+    "contactSection": "Contact",
+    "plansSection": "Ang iyong plano sa pag-aaral",
+    "name": "Buong pangalan",
+    "email": "Email",
+    "phone": "Mobile number (WhatsApp / Viber)",
+    "phonePlaceholder": "+63 9XX XXX XXXX",
+    "nationality": "Nasyonalidad",
+    "destinationCountry": "Saan mo gustong mag-aral?",
+    "anyCountry": "Hindi pa napagpasyahan",
+    "destinationCity": "Lungsod",
+    "cityPlaceholder": "hal. Sydney",
+    "university": "Unibersidad",
+    "universityPlaceholder": "hal. University of Sydney",
+    "studyStart": "Kailan ka lilipat?",
+    "notSure": "Hindi pa sigurado",
+    "budget": "Budget sa upa",
+    "budgetPlaceholder": "hal. A$400 kada linggo o ₱60,000 kada buwan",
+    "consent": "Ibahagi ang aking detalye sa mga accommodation provider para makontak nila ako tungkol sa mga kuwarto.",
+    "privacyNote": "Ibinabahagi lang namin ang iyong detalye sa mga property na interesado ka, at kung naka-tick lang ang box sa itaas. Puwede mo itong baguhin o hilingin na burahin ang iyong data anumang oras. <privacy>Privacy notice</privacy>",
+    "save": "I-save ang profile",
+    "saveContinue": "I-save at magpatuloy",
+    "saved": "Na-save.",
+    "errors": {
+      "name": "Pakilagay ang iyong buong pangalan.",
+      "phone": "Numero, espasyo, bracket at + lang ang puwede.",
+      "tooLong": "Masyadong mahaba."
+    }
+  },
+  "privacy": {
+    "metaTitle": "Privacy notice",
+    "title": "Privacy notice",
+    "intro": "Ang {site} ay isang prototype. Ipinapaliwanag ng notice na ito kung ano ang kinokolekta namin at bakit, alinsunod sa Data Privacy Act of 2012 (RA 10173) at mga katulad na batas kung saan ka nakatira.",
+    "collectTitle": "Ano ang kinokolekta namin",
+    "collect": "Ang iyong pangalan, email at, kung ibibigay mo, numero ng telepono, nasyonalidad, plano sa pag-aaral at budget. Itinatala rin namin ang mga hakbang mo sa site — mga paghahanap, mga lungsod at tirahang tiningnan mo, mga kuwartong pinili mo at mga enquiry na ipinadala mo — para mas mabilis kang matulungan ng aming mga eksperto.",
+    "useTitle": "Paano namin ito ginagamit",
+    "use": "Para sagutin ang iyong mga enquiry, magrekomenda ng kuwarto, at pagandahin ang site. Kung papayag ka, ibabahagi namin ang iyong contact details at plano sa pag-aaral sa mga accommodation provider para makontak ka nila. Hindi namin ibinebenta ang iyong data.",
+    "rightsTitle": "Ang iyong mga karapatan",
+    "rights": "Puwede mong tingnan, itama o burahin ang iyong data, o bawiin ang pahintulot, anumang oras mula sa iyong profile o sa pag-email sa {email}."
+  },
+  "notFound": {
+    "title": "Hindi namin mahanap ang page na iyan",
+    "text": "Maaaring nailipat na ang tirahan o lungsod. Subukang maghanap na lang.",
+    "back": "Bumalik sa home"
+  }
+}

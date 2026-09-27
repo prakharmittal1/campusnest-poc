@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useSelectedRoom } from "@/components/enquiry/SelectedRoomContext";
+import { track } from "@/app/actions/track";
 import { Button } from "@/components/ui/Button";
-import { roomCategoryLabel } from "@/lib/constants";
-import { formatMoney, formatTenancy, periodShort } from "@/lib/format";
+import { isRoomCategory } from "@/lib/constants";
+import { formatMoney, rentPeriod, tenancy } from "@/lib/format";
 
 type Room = {
   id: number;
@@ -21,10 +23,14 @@ type RoomTypeListProps = {
 };
 
 export function RoomTypeList({ rooms, market }: RoomTypeListProps) {
+  const t = useTranslations("property");
+  const tCommon = useTranslations("common");
+  const tRoom = useTranslations("roomCategories");
   const selected = useSelectedRoom();
 
   function enquire(roomName: string) {
     selected?.setRoom(roomName);
+    track("select_room", { room: roomName });
     const form = document.getElementById("enquire");
     form?.scrollIntoView({ behavior: "smooth", block: "start" });
     form?.querySelector<HTMLInputElement>("input[name=name]")?.focus({ preventScroll: true });
@@ -37,7 +43,11 @@ export function RoomTypeList({ rooms, market }: RoomTypeListProps) {
           <div className={room.available ? "" : "opacity-50"}>
             <h3 className="text-[15px] font-bold text-ink">{room.name}</h3>
             <p className="mt-0.5 text-sm text-muted">
-              {roomCategoryLabel(room.category)} · {room.sizeSqm} m² · {formatTenancy(room.tenancyWeeks, market)}
+              {t("roomDetails", {
+                category: isRoomCategory(room.category) ? tRoom(room.category) : room.category,
+                size: room.sizeSqm,
+                tenancy: tCommon("tenancy", tenancy(room.tenancyWeeks, market)),
+              })}
             </p>
           </div>
 
@@ -45,10 +55,11 @@ export function RoomTypeList({ rooms, market }: RoomTypeListProps) {
             <p className="text-sm text-muted">
               {room.available ? (
                 <>
-                  <span className="text-lg font-extrabold text-ink">{formatMoney(room.price, market)}</span> /{periodShort(market)}
+                  <span className="text-lg font-extrabold text-ink">{formatMoney(room.price, market)}</span> /
+                  {tCommon("periodShort", { period: rentPeriod(market) })}
                 </>
               ) : (
-                "Sold out"
+                tCommon("soldOut")
               )}
             </p>
             <Button
@@ -56,7 +67,7 @@ export function RoomTypeList({ rooms, market }: RoomTypeListProps) {
               size="sm"
               onClick={() => enquire(room.name)}
             >
-              {room.available ? "Enquire" : "Join waitlist"}
+              {room.available ? t("enquire") : t("joinWaitlist")}
             </Button>
           </div>
         </li>

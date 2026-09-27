@@ -7,13 +7,22 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { SearchBar } from "@/components/SearchBar";
 import { Container, SectionHeading } from "@/components/ui/layout";
 import { Tag } from "@/components/ui/Tag";
-import { HOME_FAQS, HOW_IT_WORKS } from "@/content/home";
-import { periodShort } from "@/lib/format";
+import { getTranslations } from "next-intl/server";
+import type { FaqItem } from "@/components/Faq";
+import { rentPeriod } from "@/lib/format";
 import { getCountriesWithCities, getFeaturedProperties } from "@/lib/queries";
-import { site } from "@/lib/site";
 
 export default async function HomePage() {
-  const [countries, featured] = await Promise.all([getCountriesWithCities(), getFeaturedProperties()]);
+  const [countries, featured, t, tSite, tCommon] = await Promise.all([
+    getCountriesWithCities(),
+    getFeaturedProperties(),
+    getTranslations("home"),
+    getTranslations("site"),
+    getTranslations("common"),
+  ]);
+  const promises = tSite.raw("promises") as string[];
+  const steps = t.raw("howItWorks") as { title: string; text: string }[];
+  const faqs = t.raw("faqs") as FaqItem[];
 
   const cities = countries.flatMap((country) =>
     country.cities.map((city) => ({ ...city, country, href: `/${country.slug}/${city.slug}` })),
@@ -24,16 +33,16 @@ export default async function HomePage() {
       <Container className="grid items-center gap-12 pb-20 pt-12 md:grid-cols-[1.1fr_1fr] md:pt-20">
         <div className="min-w-0">
           <h1 className="heading-xl">
-            Find your student home <span className="highlight">near campus</span>.
+            {t.rich("title", { highlight: (chunks) => <span className="highlight">{chunks}</span> })}
           </h1>
-          <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-ink-soft">{site.description}</p>
+          <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-ink-soft">{tSite("description")}</p>
 
           <div className="mt-8 max-w-xl">
             <SearchBar />
           </div>
 
           <p className="mt-4 text-sm text-muted">
-            Popular:{" "}
+            {t("popular")}{" "}
             {cities.slice(0, 4).map((city, i) => (
               <span key={city.id}>
                 {i > 0 && ", "}
@@ -45,7 +54,7 @@ export default async function HomePage() {
           </p>
 
           <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
-            {site.promises.map((promise) => (
+            {promises.map((promise) => (
               <li key={promise} className="flex items-center gap-2 text-sm font-medium text-ink-soft">
                 <Check className="size-4 text-ink" strokeWidth={2.5} aria-hidden />
                 {promise}
@@ -61,8 +70,8 @@ export default async function HomePage() {
       <section id="destinations" className="scroll-mt-20 border-t border-line py-20">
         <Container>
           <SectionHeading
-            title="Explore by city"
-            description="Rent is shown the way each market quotes it — per week or per month."
+            title={t("exploreTitle")}
+            description={t("exploreDescription")}
           />
           <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {cities.map((city) => (
@@ -75,11 +84,11 @@ export default async function HomePage() {
                     <div className="flex items-center gap-2">
                       <span className="heading-md">{city.name}</span>
                       <Tag>
-                        {city.country.currencySymbol}/{periodShort(city.country)}
+                        {city.country.currencySymbol}/{tCommon("periodShort", { period: rentPeriod(city.country) })}
                       </Tag>
                     </div>
                     <p className="mt-1 text-sm text-muted">
-                      {city._count.properties} homes · {city._count.universities} universities
+                      {t("cityStats", { homes: city._count.properties, universities: city._count.universities })}
                     </p>
                   </div>
                   <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-surface transition-colors group-hover:bg-accent">
@@ -94,7 +103,7 @@ export default async function HomePage() {
 
       <section className="border-t border-line py-20">
         <Container>
-          <SectionHeading title="Top-rated homes" description="What students are enquiring about this week." />
+          <SectionHeading title={t("topRatedTitle")} description={t("topRatedDescription")} />
           <div className="mt-8 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
             {featured.map((property) => (
               <PropertyCard key={property.slug} property={property} />
@@ -105,9 +114,9 @@ export default async function HomePage() {
 
       <section className="border-t border-line bg-surface py-20">
         <Container>
-          <SectionHeading title="How it works" />
+          <SectionHeading title={t("howItWorksTitle")} />
           <ol className="mt-10 grid gap-10 md:grid-cols-3">
-            {HOW_IT_WORKS.map((step, i) => (
+            {steps.map((step, i) => (
               <li key={step.title}>
                 <span className="flex size-9 items-center justify-center rounded-full bg-accent text-sm font-extrabold text-ink">
                   {i + 1}
@@ -122,22 +131,20 @@ export default async function HomePage() {
 
       <Container className="grid gap-10 py-20 md:grid-cols-[1fr_1.5fr]">
         <div>
-          <h2 className="heading-lg">Questions, answered</h2>
-          <p className="mt-2 text-[15px] text-muted">Can&apos;t see yours? Our experts reply within 24 hours.</p>
+          <h2 className="heading-lg">{t("faqTitle")}</h2>
+          <p className="mt-2 text-[15px] text-muted">{t("faqDescription")}</p>
         </div>
-        <Faq items={HOME_FAQS} />
+        <Faq items={faqs} />
       </Container>
 
       <Container>
         <section className="flex flex-col items-start justify-between gap-6 rounded-panel bg-ink px-7 py-10 text-white sm:flex-row sm:items-center sm:px-12 sm:py-14">
           <div>
-            <h2 className="heading-lg">Not sure where to start?</h2>
-            <p className="mt-2 max-w-md text-[15px] text-white/70">
-              Tell us your university and budget — we&apos;ll send a free shortlist within 24 hours.
-            </p>
+            <h2 className="heading-lg">{t("ctaTitle")}</h2>
+            <p className="mt-2 max-w-md text-[15px] text-white/70">{t("ctaText")}</p>
           </div>
           <EnquiryModal variant="accent" size="lg">
-            Get my free shortlist
+            {t("ctaButton")}
           </EnquiryModal>
         </section>
       </Container>

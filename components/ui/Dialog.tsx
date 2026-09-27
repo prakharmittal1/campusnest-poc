@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 
 type DialogProps = {
   /** Content of the button that opens the dialog. */
@@ -22,6 +23,7 @@ export function Dialog({ trigger, triggerClassName, title, description, children
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [open, setOpen] = useState(false);
+  const t = useTranslations("common");
 
   useEffect(() => {
     if (open) dialogRef.current?.showModal();
@@ -58,7 +60,7 @@ export function Dialog({ trigger, triggerClassName, title, description, children
                   type="button"
                   onClick={close}
                   className="-mr-2 -mt-1 rounded-control p-2 text-muted hover:bg-surface hover:text-ink"
-                  aria-label="Close"
+                  aria-label={t("close")}
                 >
                   <X className="size-5" />
                 </button>

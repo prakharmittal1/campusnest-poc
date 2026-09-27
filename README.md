@@ -14,7 +14,10 @@ university or property, filter listings, view a property and send an enquiry to 
 | Country | `/uk` | Cities with counts and links to each university |
 | City listing | `/uk/london` | Filters (university, price, room type, bills, amenities), sorting (recommended, price, distance), mobile filter drawer |
 | Property | `/uk/london/london-camden-yard` | Photo gallery, rooms and prices, amenities, map with nearby universities, reviews, policies, FAQ, enquiry form |
-| Every page | — | "Feedback" tab on the right edge: *Would you use this?* (yes / maybe / no), comments, optional email |
+| Every page | — | "Feedback" tab on the right edge: *Would you use this?* (yes / maybe / no), comments, optional email · **EN / FIL** language switch · **Sign in** |
+| Account | `/account`, `/account/welcome` | Sign in with Google or an emailed link (no passwords). New students fill in a short profile: phone, nationality, where and when they want to study, budget, and consent to share with accommodation providers |
+| Leads (team only) | `/admin` | Totals, latest accounts with their journey, and **Download Excel** (Leads, Journey and Enquiries sheets, optional date range) |
+| Privacy | `/privacy` | What we collect and why (written with the Philippine Data Privacy Act in mind) |
 
 Markets: UK (£/week), Australia (A$/week), Canada (C$/month), USA ($/month). That's 9 cities,
 25 universities and 37 properties. Filters live in the URL, so filtered links can be shared, e.g.
@@ -31,7 +34,7 @@ A "wayfinding" identity: white paper, navy ink, and one sunshine-yellow accent, 
 | `components/brand/` | `Logo` / `LogoMark` (map pin with a roof) and the hero `RouteIllustration` (inline SVG) |
 | `app/icon.svg`, `app/apple-icon.tsx`, `app/opengraph-image.tsx` | Favicon, iOS icon and social share image, all generated from the same logo geometry |
 | `lib/site.ts` | Brand name, tagline, promises and contact details |
-| `content/` | Marketing and policy copy, kept out of components so messaging can change quickly |
+| `messages/en.json`, `messages/fil.json` | **All UI copy**, in English and Filipino, so messaging can change without touching components |
 
 Rules of thumb: yellow is reserved for the one key action per view (search, send enquiry) and the
 brand mark. Use `className` on buttons for layout only (margins, width), not to override variant or size.
@@ -53,6 +56,28 @@ brand mark. Use `className` on buttons for layout only (margins, width), not to 
 - Leaflet with OpenStreetMap tiles (greyed out via CSS)
 - Zod for validating the enquiry form
 - Vercel Web Analytics for page views and visitors (`<Analytics />` in `app/layout.tsx`)
+- Better Auth for accounts (Google + email magic link), Resend to send the sign-in emails
+- next-intl for English / Filipino (language kept in a cookie, so URLs don't change)
+- ExcelJS for the leads export
+
+## Accounts, journey tracking and leads
+
+- **Journey.** `proxy.ts` gives every visitor an anonymous id cookie (`cn_aid`) and remembers UTM tags /
+  external referrer from their first visit. Key steps are saved to the `JourneyEvent` table: searches,
+  city pages (with filters), property pages, room picks, enquiries, sign-ups, sign-ins and language changes.
+  When someone signs in, everything they did while signed out is attached to their account.
+- **Leads.** The `User` table holds the profile from the welcome form. Only share students with
+  *Consent to share = Yes* with operators; the rest are for our own follow-up.
+- **Excel.** People listed in `ADMIN_EMAILS` see *Admin · leads* in the account menu. `/admin` has the
+  download button; `/admin/export?from=2026-09-01&to=2026-09-30` works as a direct link too.
+
+## Languages
+
+English and Filipino. Visitors whose browser asks for Filipino or Tagalog get Filipino automatically;
+everyone can switch in the header, footer or mobile menu, and signed-in students' choice is saved.
+To change copy, edit `messages/en.json` and `messages/fil.json` (keep the same keys in both —
+TypeScript checks keys against the English file). Property descriptions and reviews come from the
+database and stay in English. **Have a native speaker review `fil.json` before launch.**
 
 ## Getting started (local)
 
@@ -66,6 +91,10 @@ npm run db:setup       # apply migrations and load demo data
 npm run dev            # http://localhost:3000
 ```
 
+Set `BETTER_AUTH_SECRET` (`openssl rand -base64 32`) and your email in `ADMIN_EMAILS` in `.env`.
+Without `RESEND_API_KEY`, sign-in links are printed in the terminal instead of emailed; without
+`GOOGLE_CLIENT_ID` the Google button is hidden.
+
 ## Deploying (Vercel + Neon)
 
 1. Push this repo to GitHub.
@@ -73,7 +102,11 @@ npm run dev            # http://localhost:3000
    The first build is expected to fail with `DATABASE_URL is not set` — there's no database yet.
 3. In the project, open **Storage → Create Database → Neon** (free plan), and connect it to the
    project for **all environments**. This adds `DATABASE_URL` and `DATABASE_URL_UNPOOLED` automatically.
-4. **Deployments → ⋯ → Redeploy.** The build (`npm run vercel-build`) applies migrations, loads the demo
+4. In **Settings → Environment Variables**, add `BETTER_AUTH_SECRET`, `ADMIN_EMAILS`, `RESEND_API_KEY` and
+   `EMAIL_FROM` (a sender on a domain verified in Resend), and optionally `GOOGLE_CLIENT_ID` /
+   `GOOGLE_CLIENT_SECRET` (Google Cloud Console → Credentials → OAuth client ID → Web, with redirect URI
+   `https://<your domain>/api/auth/callback/google`). See `.env.example`.
+5. **Deployments → ⋯ → Redeploy.** The build (`npm run vercel-build`) applies migrations, loads the demo
    data on the first run only, and builds the site.
 
 Every push to `main` redeploys production; other branches get preview URLs.
@@ -83,10 +116,11 @@ Every push to `main` redeploys production; other branches get preview URLs.
 Page views and visitors appear in Vercel under the project's **Analytics** tab (enable it there once).
 Nothing is sent from local development.
 
-### Reading feedback and enquiries
+### Reading leads, feedback and enquiries
 
-In Vercel, open **Storage → your Neon database → Open in Neon Console → Tables**, then the `Feedback`
-and `Enquiry` tables. (Or run `npm run db:studio` locally with `DATABASE_URL` pointed at the Neon database.)
+Leads, journeys and enquiries: sign in with an `ADMIN_EMAILS` address and open `/admin` → **Download Excel**.
+Feedback: in Vercel, open **Storage → your Neon database → Open in Neon Console → Tables**, then the
+`Feedback` table. (Or run `npm run db:studio` locally with `DATABASE_URL` pointed at the Neon database.)
 
 Re-deploying never deletes data. To wipe and re-seed the demo listings, run the seed with `SEED_RESET=1`
 against the database — this also deletes enquiries and feedback.
@@ -113,15 +147,23 @@ app/
   [country]/[city]/page.tsx         listing with filters and sorting
   [country]/[city]/[property]/      property detail
   api/search/route.ts               autocomplete endpoint
-  actions/enquiry.ts, feedback.ts   server actions that validate and save enquiries / feedback
+  account/, admin/, privacy/        student profile, leads + Excel export, privacy notice
+  api/auth/[...all]/route.ts        Better Auth endpoints (Google, magic link, sessions)
+  actions/                          server actions: enquiry, feedback, profile, track, locale
   icon.svg, apple-icon.tsx, opengraph-image.tsx
 components/
   ui/                               design-system primitives
   brand/                            logo and illustration
   enquiry/, feedback/, listing/, property/, layout/
-content/                            editable copy (home, property policies and FAQs)
+content/property.ts                 property policies and FAQs (wording in messages/)
+messages/                           UI copy in English (en.json) and Filipino (fil.json)
+i18n/request.ts                     picks the language for each request
+proxy.ts                            anonymous visitor id + first-touch attribution cookies
 lib/
   site.ts                           brand config
+  auth.ts, auth-client.ts, session.ts   accounts; getViewer() for the signed-in student
+  journey.ts, tracking.ts           recording the journey
+  leads.ts, leads-excel.ts          admin queries and the Excel workbook
   queries.ts                        all database reads
   filters.ts                        URL params → validated listing filters
   format.ts, geo.ts                 prices, tenancies, distances
@@ -142,8 +184,8 @@ scripts/check-database-env.mjs      clear build error when no database is connec
 
 ## Next steps toward a real product
 
-- Analytics on search → property view → enquiry, to measure demand per city during the market test
-- Admin area to manage properties and view or assign enquiries (plus login)
+- Funnel reports (search → property view → enquiry per city) from the `JourneyEvent` table
+- Admin area to manage properties and assign leads to operators
 - Email or WhatsApp notification when an enquiry arrives
 - Move-in date and tenancy-length filters, map view on the listing page
 - Real photos and property data, uploaded through a landlord or partner portal

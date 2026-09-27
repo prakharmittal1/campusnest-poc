@@ -2,21 +2,20 @@
 
 import { Check, LoaderCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useActionState, useId } from "react";
 import { submitFeedback, type FeedbackState } from "@/app/actions/feedback";
 import { Button } from "@/components/ui/Button";
 import { cx } from "@/lib/cx";
 
-const WOULD_USE = [
-  { value: "yes", label: "Yes" },
-  { value: "maybe", label: "Maybe" },
-  { value: "no", label: "No" },
-] as const;
+const WOULD_USE = ["yes", "maybe", "no"] as const;
 
 const initialState: FeedbackState = { status: "idle" };
 
 export function FeedbackForm({ onDone }: { onDone: () => void }) {
   const [state, formAction, pending] = useActionState(submitFeedback, initialState);
+  const t = useTranslations("feedback");
+  const tCommon = useTranslations("common");
   const pathname = usePathname();
   const id = useId();
 
@@ -26,10 +25,10 @@ export function FeedbackForm({ onDone }: { onDone: () => void }) {
         <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-accent text-ink">
           <Check className="size-6" aria-hidden />
         </span>
-        <h3 className="heading-md mt-4">Thank you!</h3>
-        <p className="mx-auto mt-1 max-w-xs text-sm text-muted">Your feedback helps us decide what to build next.</p>
+        <h3 className="heading-md mt-4">{t("thanksTitle")}</h3>
+        <p className="mx-auto mt-1 max-w-xs text-sm text-muted">{t("thanksText")}</p>
         <Button size="sm" className="mt-6" onClick={onDone}>
-          Close
+          {tCommon("close")}
         </Button>
       </div>
     );
@@ -46,19 +45,19 @@ export function FeedbackForm({ onDone }: { onDone: () => void }) {
       <input type="hidden" name="page" value={pathname} />
 
       <fieldset>
-        <legend className="text-[13px] font-semibold text-ink-soft">Would you use this to find a room?</legend>
+        <legend className="text-[13px] font-semibold text-ink-soft">{t("wouldUse")}</legend>
         <div className="mt-2 grid grid-cols-3 gap-2">
           {WOULD_USE.map((option) => (
-            <label key={option.value} className="cursor-pointer">
+            <label key={option} className="cursor-pointer">
               <input
                 type="radio"
                 name="wouldUse"
-                value={option.value}
-                defaultChecked={state.values?.wouldUse === option.value}
+                value={option}
+                defaultChecked={state.values?.wouldUse === option}
                 className="peer sr-only"
               />
               <span className="flex h-10 items-center justify-center rounded-control text-sm font-semibold text-ink ring-1 ring-inset ring-line-strong peer-checked:bg-accent peer-checked:ring-accent peer-focus-visible:ring-2 peer-focus-visible:ring-ink">
-                {option.label}
+                {t(option)}
               </span>
             </label>
           ))}
@@ -67,7 +66,7 @@ export function FeedbackForm({ onDone }: { onDone: () => void }) {
 
       <div>
         <label htmlFor={`${id}-message`} className="block text-[13px] font-semibold text-ink-soft">
-          What worked? What was confusing or missing?
+          {t("message")}
         </label>
         <textarea
           id={`${id}-message`}
@@ -87,7 +86,7 @@ export function FeedbackForm({ onDone }: { onDone: () => void }) {
 
       <div>
         <label htmlFor={`${id}-email`} className="block text-[13px] font-semibold text-ink-soft">
-          Email (optional — if we can follow up)
+          {t("email")}
         </label>
         <input
           id={`${id}-email`}
@@ -114,7 +113,7 @@ export function FeedbackForm({ onDone }: { onDone: () => void }) {
 
       <Button type="submit" variant="accent" size="lg" disabled={pending} className="w-full">
         {pending && <LoaderCircle className="size-4 animate-spin" aria-hidden />}
-        {pending ? "Sending…" : "Send feedback"}
+        {pending ? tCommon("sending") : t("submit")}
       </Button>
     </form>
   );

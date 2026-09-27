@@ -2,11 +2,13 @@
 
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { buttonClass } from "@/components/ui/Button";
 import { cx } from "@/lib/cx";
 
 export function Gallery({ images, name }: { images: string[]; name: string }) {
+  const t = useTranslations("gallery");
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [index, setIndex] = useState(0);
 
@@ -27,11 +29,11 @@ export function Gallery({ images, name }: { images: string[]; name: string }) {
             type="button"
             onClick={() => openAt(i)}
             className={cx("relative bg-surface", i === 0 ? "col-span-4 row-span-2 md:col-span-2" : "hidden md:block")}
-            aria-label={`Open photo ${i + 1} of ${images.length}`}
+            aria-label={t("open", { index: i + 1, total: images.length })}
           >
             <Image
               src={src}
-              alt={`${name} photo ${i + 1}`}
+              alt={t("photoAlt", { name, index: i + 1 })}
               fill
               priority={i === 0}
               sizes={i === 0 ? "(min-width: 768px) 50vw, 100vw" : "25vw"}
@@ -44,14 +46,14 @@ export function Gallery({ images, name }: { images: string[]; name: string }) {
           onClick={() => openAt(0)}
           className={buttonClass({ variant: "outline", size: "sm", className: "absolute bottom-4 right-4" })}
         >
-          All {images.length} photos
+          {t("all", { count: images.length })}
         </button>
       </div>
 
       <dialog
         ref={dialogRef}
         className="m-auto h-full max-h-none w-full max-w-none bg-ink p-0 text-white"
-        aria-label={`${name} photos`}
+        aria-label={t("dialog", { name })}
         onKeyDown={(e) => {
           if (e.key === "ArrowRight") step(1);
           if (e.key === "ArrowLeft") step(-1);
@@ -66,16 +68,16 @@ export function Gallery({ images, name }: { images: string[]; name: string }) {
               type="button"
               onClick={() => dialogRef.current?.close()}
               className="rounded-control p-2 hover:bg-white/10"
-              aria-label="Close photos"
+              aria-label={t("close")}
             >
               <X className="size-5" />
             </button>
           </div>
           <div className="relative flex-1">
-            <Image src={images[index]} alt={`${name} photo ${index + 1}`} fill sizes="100vw" className="object-contain" />
+            <Image src={images[index]} alt={t("photoAlt", { name, index: index + 1 })} fill sizes="100vw" className="object-contain" />
             {[
-              { delta: -1, label: "Previous photo", Icon: ChevronLeft, side: "left-4" },
-              { delta: 1, label: "Next photo", Icon: ChevronRight, side: "right-4" },
+              { delta: -1, label: t("previous"), Icon: ChevronLeft, side: "left-4" },
+              { delta: 1, label: t("next"), Icon: ChevronRight, side: "right-4" },
             ].map(({ delta, label, Icon, side }) => (
               <button
                 key={label}

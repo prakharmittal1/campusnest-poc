@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   images: {
@@ -7,4 +8,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Loads i18n/request.ts, which picks the UI language for each request.
+const withNextIntl = createNextIntlPlugin();
+
+export default withNextIntl(nextConfig);

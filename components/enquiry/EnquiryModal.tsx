@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { buttonClass, type ButtonSize, type ButtonVariant } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
@@ -19,12 +20,13 @@ type EnquiryModalProps = {
 
 /** A button that opens a general "help me find a room" enquiry form. */
 export function EnquiryModal({ children, variant, size, className }: EnquiryModalProps) {
+  const t = useTranslations("enquiry");
   return (
     <Dialog
       trigger={children}
       triggerClassName={buttonClass({ variant, size, className })}
-      title="Tell us what you need"
-      description="We'll shortlist rooms that fit your budget and university."
+      title={t("modalTitle")}
+      description={t("modalDescription")}
     >
       {(close) => <EnquiryForm askCity onDone={close} />}
     </Dialog>

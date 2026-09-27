@@ -1,14 +1,20 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { DistanceTag } from "@/components/ui/Tag";
-import { formatDistance, formatMoney, formatTravelTime, periodShort } from "@/lib/format";
+import { useTranslations } from "next-intl";
+import { DistanceTag, Tag } from "@/components/ui/Tag";
+import { formatDistance, formatMoney, rentPeriod, travelTime } from "@/lib/format";
 import type { PropertyCardData } from "@/lib/queries";
 
 export function PropertyCard({ property }: { property: PropertyCardData }) {
+  const t = useTranslations("common");
+  const tCard = useTranslations("propertyCard");
   return (
     <Link href={property.href} className="group block">
       <div className="relative aspect-[4/3] overflow-hidden rounded-card bg-surface">
+        {property.isDemo && (
+          <Tag className="absolute left-3 top-3 z-10 bg-white/95 text-ink-soft">{t("exampleListing")}</Tag>
+        )}
         {property.image && (
           <Image
             src={property.image}
@@ -27,7 +33,7 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
         <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-ink">
           <Star className="size-3.5 fill-accent text-accent-strong" aria-hidden />
           {property.rating.toFixed(1)}
-          <span className="sr-only">out of 5 from {property.reviewCount} reviews</span>
+          <span className="sr-only">{tCard("ratingSr", { count: property.reviewCount })}</span>
         </span>
       </div>
       <p className="mt-0.5 text-sm text-muted">
@@ -35,19 +41,19 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
       </p>
       {property.distance && (
         <DistanceTag className="mt-2">
-          {formatDistance(property.distance.km, property.country.slug)} · {formatTravelTime(property.distance.km)}
+          {formatDistance(property.distance.km, property.country.slug)} · {t("travel", travelTime(property.distance.km))}
         </DistanceTag>
       )}
       <p className="mt-2 text-sm text-muted">
-        {property.fromPrice !== null ? (
-          <>
-            From <span className="font-extrabold text-ink">{formatMoney(property.fromPrice, property.country)}</span>
-            {` /${periodShort(property.country)}`}
-          </>
-        ) : (
-          "Sold out"
-        )}
-        {property.billsIncluded && " · Bills included"}
+        {property.fromPrice !== null
+          ? t.rich("fromPrice", {
+              period: t("periodShort", { period: rentPeriod(property.country) }),
+              price: () => (
+                <span className="font-extrabold text-ink">{formatMoney(property.fromPrice!, property.country)}</span>
+              ),
+            })
+          : t("soldOut")}
+        {property.billsIncluded && ` · ${t("billsIncluded")}`}
       </p>
     </Link>
   );

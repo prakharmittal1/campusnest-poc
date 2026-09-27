@@ -8,6 +8,8 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 import { AMENITIES, BASIC_AMENITIES, type AmenityKey } from "../lib/amenities";
+import en from "../messages/en.json";
+import { BENCHMARKS } from "./benchmarks";
 import type { RoomCategory } from "../lib/constants";
 
 const prisma = new PrismaClient({
@@ -369,13 +371,31 @@ function buildRoomTypes(country: CountrySeed, city: CitySeed) {
   return rooms;
 }
 
+/** Published market rents. Always refreshed, independent of the demo listings. */
+async function seedBenchmarks() {
+  for (const benchmark of BENCHMARKS) {
+    const city = await prisma.city.findUnique({ where: { slug: benchmark.citySlug }, select: { id: true } });
+    if (!city) continue;
+    const { lowPrice, highPrice, period, sourceName, sourceUrl, note, asOf } = benchmark;
+    const data = { lowPrice, highPrice, period, sourceName, sourceUrl, note, asOf };
+    await prisma.rentBenchmark.upsert({
+      where: { cityId: city.id },
+      create: { cityId: city.id, ...data },
+      update: data,
+    });
+  }
+  console.log(`Updated ${BENCHMARKS.length} city rent benchmarks.`);
+}
+
 async function main() {
   const reset = process.env.SEED_RESET === "1";
   if (!reset && (await prisma.country.count()) > 0) {
-    console.log("Demo data already present — skipping seed (set SEED_RESET=1 to re-seed).");
+    console.log("Demo data already present — skipping listings (set SEED_RESET=1 to re-seed).");
+    await seedBenchmarks();
     return;
   }
 
+  await prisma.rentBenchmark.deleteMany();
   await prisma.feedback.deleteMany();
   await prisma.enquiry.deleteMany();
   await prisma.review.deleteMany();
@@ -417,7 +437,7 @@ async function main() {
         const highlights = amenities
           .filter((key) => !BASIC_AMENITIES.includes(key))
           .slice(0, 3)
-          .map((key) => AMENITIES[key].label.toLowerCase());
+          .map((key) => en.amenities[key].toLowerCase());
 
         const reviews = Array.from({ length: 3 + Math.floor(rand() * 3) }, () => ({
           authorName: pick(REVIEWERS),
@@ -460,6 +480,7 @@ async function main() {
   }
 
   console.log(`Seeded ${COUNTRIES.length} countries and ${propertyCount} properties.`);
+  await seedBenchmarks();
 }
 
 main()

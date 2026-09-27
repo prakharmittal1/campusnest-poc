@@ -2,9 +2,11 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Container } from "@/components/ui/layout";
 import { Tag } from "@/components/ui/Tag";
+import { rentPeriod } from "@/lib/format";
 import { getCountry } from "@/lib/queries";
 
 type CountryPageProps = { params: Promise<{ country: string }> };
@@ -12,21 +14,26 @@ type CountryPageProps = { params: Promise<{ country: string }> };
 export async function generateMetadata({ params }: CountryPageProps): Promise<Metadata> {
   const country = await getCountry((await params).country);
   if (!country) return {};
-  return { title: `Student accommodation in ${country.name}` };
+  const t = await getTranslations("country");
+  return { title: t("metaTitle", { country: country.name }) };
 }
 
 export default async function CountryPage({ params }: CountryPageProps) {
   const country = await getCountry((await params).country);
   if (!country) notFound();
+  const [t, tCommon] = await Promise.all([getTranslations("country"), getTranslations("common")]);
 
   return (
     <Container className="pt-8">
       <Breadcrumbs items={[{ label: country.name }]} />
       <h1 className="heading-xl mt-6">
-        Student homes in <span className="highlight">{country.name}</span>
+        {t.rich("title", {
+          country: country.name,
+          highlight: (chunks) => <span className="highlight">{chunks}</span>,
+        })}
       </h1>
       <p className="mt-4 text-[17px] text-ink-soft">
-        {country.cities.length} cities · Prices in {country.currencyCode} per {country.rentPeriod}
+        {t("summary", { cities: country.cities.length, currency: country.currencyCode, period: rentPeriod(country) })}
       </p>
 
       <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -35,13 +42,13 @@ export default async function CountryPage({ params }: CountryPageProps) {
             <Link href={`/${country.slug}/${city.slug}`} className="group flex items-center justify-between gap-4">
               <div>
                 <h2 className="heading-md group-hover:underline group-hover:underline-offset-4">{city.name}</h2>
-                <p className="mt-1 text-sm text-muted">{city._count.properties} homes</p>
+                <p className="mt-1 text-sm text-muted">{tCommon("homes", { count: city._count.properties })}</p>
               </div>
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-surface transition-colors group-hover:bg-accent">
                 <ArrowRight className="size-4" aria-hidden />
               </span>
             </Link>
-            <p className="mt-6 text-xs font-semibold uppercase tracking-wider text-muted">Near university</p>
+            <p className="mt-6 text-xs font-semibold uppercase tracking-wider text-muted">{t("nearUniversity")}</p>
             <ul className="mt-2 flex flex-wrap gap-2">
               {city.universities.map((u) => (
                 <li key={u.id}>

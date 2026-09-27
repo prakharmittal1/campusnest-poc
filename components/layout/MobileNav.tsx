@@ -2,12 +2,15 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { EnquiryModal } from "@/components/enquiry/EnquiryModal";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 type NavCountry = { slug: string; name: string; cities: { slug: string; name: string }[] };
 
 export function MobileNav({ countries }: { countries: NavCountry[] }) {
+  const t = useTranslations("header");
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -19,7 +22,7 @@ export function MobileNav({ countries }: { countries: NavCountry[] }) {
         className="-mr-2 rounded-control p-2 text-ink hover:bg-surface"
         aria-expanded={open}
         aria-controls="mobile-nav"
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? t("closeMenu") : t("openMenu")}
       >
         {open ? <X className="size-5" /> : <Menu className="size-5" />}
       </button>
@@ -27,7 +30,7 @@ export function MobileNav({ countries }: { countries: NavCountry[] }) {
       {open && (
         <nav
           id="mobile-nav"
-          aria-label="Destinations"
+          aria-label={t("destinations")}
           className="absolute inset-x-0 top-16 max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-line bg-canvas px-5 pb-6"
         >
           {countries.map((country) => (
@@ -47,8 +50,9 @@ export function MobileNav({ countries }: { countries: NavCountry[] }) {
             </div>
           ))}
           <EnquiryModal size="lg" className="mt-6 w-full">
-            Get expert help
+            {t("getExpertHelp")}
           </EnquiryModal>
+          <LanguageSwitcher className="mt-4 w-fit" />
         </nav>
       )}
     </div>
